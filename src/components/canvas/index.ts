@@ -1,3 +1,6 @@
 export { CanvasEngine } from './CanvasEngine'
+export { CanvasTile } from './CanvasTile'
+export { EditModeButton } from './EditModeButton'
 export { ZoomPanControls } from './ZoomPanControls'
 export { GridBackground } from './GridBackground'
+export type { HighlightState } from './CanvasTile'

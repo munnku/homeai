@@ -2,7 +2,7 @@
 
 import { useState, useRef, useCallback, useEffect } from 'react'
 import { useGesture } from '@use-gesture/react'
-import { fitToScreen, type Viewport } from '@/lib/canvas'
+import { fitToScreen, GRID_UNIT, type Viewport } from '@/lib/canvas'
 import type { CanvasPos } from '@/lib/data'
 import { ZoomPanControls } from './ZoomPanControls'
 import { GridBackground } from './GridBackground'
@@ -14,6 +14,9 @@ interface Props {
 }
 
 export function CanvasEngine({ tiles, editMode = false, children }: Props) {
+  const canvasW = tiles.length > 0 ? Math.max(...tiles.map(t => (t.x + t.w) * GRID_UNIT)) : 400
+  const canvasH = tiles.length > 0 ? Math.max(...tiles.map(t => (t.y + t.h) * GRID_UNIT)) : 300
+
   const containerRef = useRef<HTMLDivElement>(null)
   const [viewport, setViewport] = useState<Viewport>({ offsetX: 0, offsetY: 0, zoom: 1 })
   const viewportRef = useRef(viewport)
@@ -92,6 +95,8 @@ export function CanvasEngine({ tiles, editMode = false, children }: Props) {
           transformOrigin: '0 0',
           position: 'absolute',
           willChange: 'transform',
+          width: canvasW,
+          height: canvasH,
         }}
       >
         {editMode && <GridBackground />}

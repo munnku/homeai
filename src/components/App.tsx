@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { PhoneShell } from './ui/PhoneShell'
 import { TabBar, type Tab } from './ui/TabBar'
-import { HomeScreen } from './screens/HomeScreen'
+import { FloorPlanScreen } from './screens/FloorPlanScreen'
 import { SearchScreen } from './screens/SearchScreen'
 import { RoomDetailScreen } from './screens/RoomDetailScreen'
 import { FurnitureDetailScreen } from './screens/FurnitureDetailScreen'
@@ -56,11 +56,7 @@ export function App() {
     <PhoneShell>
       {/* Base layer */}
       {activeTab === 'home' && (
-        <HomeScreen
-          onRoomClick={pushRoom}
-          onSearchFocus={() => handleTabChange('search')}
-          onAddClick={() => setShowAdd(true)}
-        />
+        <FloorPlanScreen onRoomClick={pushRoom} />
       )}
       {activeTab === 'search' && <SearchScreen />}
       {activeTab === 'items' && <ItemsScreen onItemClick={pushItem} />}

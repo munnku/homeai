@@ -6,6 +6,7 @@ import { TabBar, type Tab } from './ui/TabBar'
 import { FloorPlanScreen } from './screens/FloorPlanScreen'
 import { SearchScreen } from './screens/SearchScreen'
 import { RoomDetailScreen } from './screens/RoomDetailScreen'
+import { RoomCanvasScreen } from './screens/RoomCanvasScreen'
 import { FurnitureDetailScreen } from './screens/FurnitureDetailScreen'
 import { ItemDetailScreen } from './screens/ItemDetailScreen'
 import { AddScreen } from './screens/AddScreen'
@@ -14,7 +15,7 @@ import { SettingsScreen } from './screens/SettingsScreen'
 import type { Room, Furniture, FlatItem } from '@/lib/data'
 
 type StackItem =
-  | { type: 'room'; room: Room }
+  | { type: 'room'; room: Room; highlightFurnitureId?: string }
   | { type: 'furniture'; room: Room; furniture: Furniture }
   | { type: 'item'; item: FlatItem }
 
@@ -31,8 +32,8 @@ export function App() {
   const [stack, setStack] = useState<StackItem[]>([])
   const [showAdd, setShowAdd] = useState(false)
 
-  function pushRoom(room: Room) {
-    setStack(s => [...s, { type: 'room', room }])
+  function pushRoom(room: Room, highlightFurnitureId?: string) {
+    setStack(s => [...s, { type: 'room', room, highlightFurnitureId }])
   }
 
   function pushFurniture(room: Room, furniture: Furniture) {
@@ -69,11 +70,12 @@ export function App() {
         if (frame.type === 'room') {
           return (
             <div key={i} style={slideIn}>
-              <RoomDetailScreen
+              <RoomCanvasScreen
                 room={frame.room}
                 onBack={pop}
                 onItemClick={pushItem}
                 onFurnitureClick={(f) => pushFurniture(frame.room, f)}
+                highlightFurnitureId={frame.highlightFurnitureId}
               />
             </div>
           )

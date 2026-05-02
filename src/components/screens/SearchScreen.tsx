@@ -62,7 +62,7 @@ export function SearchScreen({ onItemClick, initialFocus = false }: Props) {
   }
 
   return (
-    <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column' }}>
+    <div style={{ position: 'absolute', inset: 0, paddingBottom: 'var(--tab-bar-h)', display: 'flex', flexDirection: 'column' }}>
 
       {/* Sticky search header */}
       <div className="glass-strong" style={{
@@ -137,7 +137,7 @@ export function SearchScreen({ onItemClick, initialFocus = false }: Props) {
       </div>
 
       {/* Content */}
-      <div style={{ flex: 1, overflowY: 'auto', padding: '12px 16px 80px' }}>
+      <div style={{ flex: 1, overflowY: 'auto', padding: '12px 16px 20px' }}>
 
         {/* Text search results */}
         {mode === 'text' && (

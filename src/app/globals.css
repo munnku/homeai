@@ -4,19 +4,19 @@
 :root {
   --font-rounded: 'M PLUS Rounded 1c', system-ui, sans-serif;
 
-  /* Glass morphism */
-  --glass:         rgba(255, 253, 250, 0.56);
-  --glass-hover:   rgba(255, 253, 250, 0.70);
-  --glass-strong:  rgba(255, 253, 250, 0.86);
-  --glass-border:  rgba(255, 255, 255, 0.64);
+  /* Glass morphism — crystal clear */
+  --glass:         rgba(255, 255, 255, 0.28);
+  --glass-hover:   rgba(255, 255, 255, 0.42);
+  --glass-strong:  rgba(255, 255, 255, 0.68);
+  --glass-border:  rgba(255, 255, 255, 0.55);
   --glass-shadow:
-    0 2px 14px rgba(140, 90, 50, 0.09),
-    0 1px 3px rgba(0,0,0,0.04),
-    inset 0 1px 0 rgba(255,255,255,0.48);
+    0 2px 16px rgba(120, 80, 40, 0.07),
+    0 1px 4px rgba(0,0,0,0.04),
+    inset 0 1px 0 rgba(255,255,255,0.60);
   --glass-shadow-lg:
-    0 8px 32px rgba(140, 90, 50, 0.12),
+    0 8px 32px rgba(120, 80, 40, 0.10),
     0 2px 8px rgba(0,0,0,0.05),
-    inset 0 1px 0 rgba(255,255,255,0.48);
+    inset 0 1px 0 rgba(255,255,255,0.60);
 
   /* Accent — warm amber */
   --accent:       #E8A87C;
@@ -95,15 +95,15 @@ body {
 /* ─── Glass utility ──────────────────────────────── */
 .glass {
   background: var(--glass);
-  backdrop-filter: blur(16px) saturate(140%);
-  -webkit-backdrop-filter: blur(16px) saturate(140%);
+  backdrop-filter: blur(20px) saturate(150%);
+  -webkit-backdrop-filter: blur(20px) saturate(150%);
   border: 1px solid var(--glass-border);
   box-shadow: var(--glass-shadow);
 }
 .glass-strong {
   background: var(--glass-strong);
-  backdrop-filter: blur(24px) saturate(160%);
-  -webkit-backdrop-filter: blur(24px) saturate(160%);
+  backdrop-filter: blur(28px) saturate(160%);
+  -webkit-backdrop-filter: blur(28px) saturate(160%);
   border: 1px solid var(--glass-border);
   box-shadow: var(--glass-shadow);
 }

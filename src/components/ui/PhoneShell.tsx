@@ -3,12 +3,14 @@
 export function PhoneShell({ children }: { children: React.ReactNode }) {
   return (
     <>
-      {/* Mobile: full screen */}
+      {/* Mobile: full screen — safe-area insets applied here */}
       <div className="phone-mobile" style={{
         width: '100%',
         height: '100dvh',
         position: 'relative',
         overflow: 'hidden',
+        paddingTop: 'env(safe-area-inset-top)',
+        paddingBottom: 'env(safe-area-inset-bottom)',
       }}>
         {children}
       </div>

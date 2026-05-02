@@ -1,179 +1,149 @@
-// All icons use a single unified muted colour (--icon) by default.
-// Override with `color` prop only for active / semantic states.
+// Thin-line outline icons — strokeWidth 1.5, fill="none" throughout
+// All icons default to var(--icon); override with color prop for active/semantic states.
 
 type P = { size?: number; color?: string }
 
-const d = (color?: string) => color ?? 'var(--icon)'
+const c = (color?: string) => color ?? 'var(--icon)'
+const base = (color?: string) => ({
+  fill: 'none' as const,
+  stroke: c(color),
+  strokeWidth: 1.5,
+  strokeLinecap: 'round' as const,
+  strokeLinejoin: 'round' as const,
+})
 
 export function IconHome({ size = 22, color }: P) {
   return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none"
-         stroke={d(color)} strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
-      <path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H4a1 1 0 01-1-1z" />
-      <path d="M9 21V12h6v9" />
+    <svg width={size} height={size} viewBox="0 0 24 24" {...base(color)}>
+      <path d="M2.25 12 10.204 4.046a2.538 2.538 0 0 1 3.592 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75V15.75c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h7.5" />
     </svg>
   )
 }
 
 export function IconSearch({ size = 22, color }: P) {
   return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none"
-         stroke={d(color)} strokeWidth={2.2} strokeLinecap="round" strokeLinejoin="round">
-      <circle cx={11} cy={11} r={8} />
-      <path d="M21 21l-4.35-4.35" />
+    <svg width={size} height={size} viewBox="0 0 24 24" {...base(color)}>
+      <path d="M21 21 15.803 15.803m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
     </svg>
   )
 }
 
 export function IconBox({ size = 22, color }: P) {
   return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none"
-         stroke={d(color)} strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
-      <path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z" />
-      <polyline points="3.27 6.96 12 12.01 20.73 6.96" />
-      <line x1={12} y1={22.08} x2={12} y2={12} />
+    <svg width={size} height={size} viewBox="0 0 24 24" {...base(color)}>
+      <path d="M21 7.5l-9-5.25L3 7.5m18 0-9 5.25m9-5.25v9l-9 5.25M3 7.5l9 5.25M3 7.5v9l9 5.25m0-9v9" />
     </svg>
   )
 }
 
 export function IconSettings({ size = 22, color }: P) {
   return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none"
-         stroke={d(color)} strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
-      <circle cx={12} cy={12} r={3} />
-      <path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z" />
+    <svg width={size} height={size} viewBox="0 0 24 24" {...base(color)}>
+      <path d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.325.196.72.257 1.076.124l1.217-.456a1.125 1.125 0 0 1 1.37.49l1.296 2.247a1.125 1.125 0 0 1-.26 1.431l-1.003.827c-.293.241-.438.613-.43.992a7 7 0 0 1 0 .255c-.008.378.137.75.43.99l1.005.828c.424.35.534.954.26 1.43l-1.298 2.247a1.125 1.125 0 0 1-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.57 6.57 0 0 1-.22.128c-.331.183-.581.495-.644.869l-.213 1.28c-.09.543-.56.941-1.11.941h-2.594c-.55 0-1.02-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 0 1-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 0 1-1.369-.49l-1.297-2.247a1.125 1.125 0 0 1 .26-1.431l1.004-.827c.292-.24.437-.613.43-.992a6.932 6.932 0 0 1 0-.255c.007-.378-.138-.75-.43-.99l-1.004-.828a1.125 1.125 0 0 1-.26-1.43l1.297-2.247a1.125 1.125 0 0 1 1.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.087.22-.128.332-.183.582-.495.644-.869l.214-1.281Z" />
+      <path d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
     </svg>
   )
 }
 
 export function IconPlus({ size = 22, color }: P) {
   return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none"
-         stroke={d(color)} strokeWidth={2.5} strokeLinecap="round">
-      <path d="M12 5v14M5 12h14" />
+    <svg width={size} height={size} viewBox="0 0 24 24" {...base(color)}>
+      <path d="M12 4.5v15m7.5-7.5h-15" />
     </svg>
   )
 }
 
 export function IconChevronRight({ size = 16, color }: P) {
   return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none"
-         stroke={d(color)} strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round">
-      <polyline points="9 18 15 12 9 6" />
+    <svg width={size} height={size} viewBox="0 0 24 24" {...base(color)}>
+      <path d="m8.25 4.5 7.5 7.5-7.5 7.5" />
     </svg>
   )
 }
 
 export function IconChevronDown({ size = 16, color }: P) {
   return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none"
-         stroke={d(color)} strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round">
-      <polyline points="6 9 12 15 18 9" />
+    <svg width={size} height={size} viewBox="0 0 24 24" {...base(color)}>
+      <path d="m19.5 8.25-7.5 7.5-7.5-7.5" />
     </svg>
   )
 }
 
 export function IconArrowLeft({ size = 22, color }: P) {
   return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none"
-         stroke={d(color)} strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round">
-      <path d="M19 12H5M12 5l-7 7 7 7" />
+    <svg width={size} height={size} viewBox="0 0 24 24" {...base(color)}>
+      <path d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
     </svg>
   )
 }
 
 export function IconCamera({ size = 22, color }: P) {
   return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none"
-         stroke={d(color)} strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
-      <path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z" />
-      <circle cx={12} cy={13} r={4} />
+    <svg width={size} height={size} viewBox="0 0 24 24" {...base(color)}>
+      <path d="M6.827 6.175A2.31 2.31 0 0 1 5.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 0 0-1.134-.175 2.31 2.31 0 0 1-1.64-1.055l-.822-1.316a2.192 2.192 0 0 0-1.736-1.039 48.774 48.774 0 0 0-5.232 0 2.192 2.192 0 0 0-1.736 1.039l-.821 1.316Z" />
+      <path d="M16.5 12.75a4.5 4.5 0 1 1-9 0 4.5 4.5 0 0 1 9 0ZM18.75 10.5h.008v.008h-.008V10.5Z" />
     </svg>
   )
 }
 
 export function IconQR({ size = 22, color }: P) {
   return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none"
-         stroke={d(color)} strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
-      <rect x={3} y={3} width={7} height={7} />
-      <rect x={14} y={3} width={7} height={7} />
-      <rect x={3} y={14} width={7} height={7} />
-      <rect x={5} y={5} width={3} height={3} fill={d(color)} stroke="none" />
-      <rect x={16} y={5} width={3} height={3} fill={d(color)} stroke="none" />
-      <rect x={5} y={16} width={3} height={3} fill={d(color)} stroke="none" />
-      <path d="M14 14h3v3h-3zM17 17h3v3h-3zM14 17v3" />
+    <svg width={size} height={size} viewBox="0 0 24 24" {...base(color)}>
+      <rect x="3" y="3" width="7" height="7" rx="1" />
+      <rect x="14" y="3" width="7" height="7" rx="1" />
+      <rect x="3" y="14" width="7" height="7" rx="1" />
+      <rect x="5.5" y="5.5" width="2" height="2" rx="0.4" />
+      <rect x="16.5" y="5.5" width="2" height="2" rx="0.4" />
+      <rect x="5.5" y="16.5" width="2" height="2" rx="0.4" />
+      <path d="M14 14h3v3h-3ZM17 17h3v3h-3ZM14 20h3M20 14v3" />
     </svg>
   )
 }
 
 export function IconEdit({ size = 18, color }: P) {
   return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none"
-         stroke={d(color)} strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
-      <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" />
-      <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" />
+    <svg width={size} height={size} viewBox="0 0 24 24" {...base(color)}>
+      <path d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125" />
     </svg>
   )
 }
 
 export function IconTrash({ size = 18, color }: P) {
   return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none"
-         stroke={d(color)} strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
-      <polyline points="3 6 5 6 21 6" />
-      <path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6" />
-      <path d="M10 11v6M14 11v6M9 6V4a1 1 0 011-1h4a1 1 0 011 1v2" />
+    <svg width={size} height={size} viewBox="0 0 24 24" {...base(color)}>
+      <path d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
     </svg>
   )
 }
 
 export function IconMove({ size = 18, color }: P) {
   return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none"
-         stroke={d(color)} strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
-      <polyline points="5 9 2 12 5 15" />
-      <polyline points="9 5 12 2 15 5" />
-      <polyline points="15 19 12 22 9 19" />
-      <polyline points="19 9 22 12 19 15" />
-      <line x1={2} y1={12} x2={22} y2={12} />
-      <line x1={12} y1={2} x2={12} y2={22} />
+    <svg width={size} height={size} viewBox="0 0 24 24" {...base(color)}>
+      <path d="M7.5 21 3 16.5m0 0L7.5 12M3 16.5h13.5m0-13.5L21 7.5m0 0L16.5 12M21 7.5H7.5" />
     </svg>
   )
 }
 
 export function IconGrid({ size = 20, color }: P) {
   return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none"
-         stroke={d(color)} strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
-      <rect x={3} y={3} width={7} height={7} />
-      <rect x={14} y={3} width={7} height={7} />
-      <rect x={14} y={14} width={7} height={7} />
-      <rect x={3} y={14} width={7} height={7} />
+    <svg width={size} height={size} viewBox="0 0 24 24" {...base(color)}>
+      <path d="M3.75 6A2.25 2.25 0 0 1 6 3.75h2.25A2.25 2.25 0 0 1 10.5 6v2.25a2.25 2.25 0 0 1-2.25 2.25H6a2.25 2.25 0 0 1-2.25-2.25V6ZM3.75 15.75A2.25 2.25 0 0 1 6 13.5h2.25a2.25 2.25 0 0 1 2.25 2.25V18a2.25 2.25 0 0 1-2.25 2.25H6A2.25 2.25 0 0 1 3.75 18v-2.25ZM13.5 6a2.25 2.25 0 0 1 2.25-2.25H18A2.25 2.25 0 0 1 20.25 6v2.25A2.25 2.25 0 0 1 18 10.5h-2.25a2.25 2.25 0 0 1-2.25-2.25V6ZM13.5 15.75a2.25 2.25 0 0 1 2.25-2.25H18a2.25 2.25 0 0 1 2.25 2.25V18A2.25 2.25 0 0 1 18 20.25h-2.25A2.25 2.25 0 0 1 13.5 18v-2.25Z" />
     </svg>
   )
 }
 
 export function IconList({ size = 20, color }: P) {
   return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none"
-         stroke={d(color)} strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
-      <line x1={8} y1={6} x2={21} y2={6} />
-      <line x1={8} y1={12} x2={21} y2={12} />
-      <line x1={8} y1={18} x2={21} y2={18} />
-      <line x1={3} y1={6} x2={3.01} y2={6} />
-      <line x1={3} y1={12} x2={3.01} y2={12} />
-      <line x1={3} y1={18} x2={3.01} y2={18} />
+    <svg width={size} height={size} viewBox="0 0 24 24" {...base(color)}>
+      <path d="M8.25 6.75h12M8.25 12h12m-12 5.25h12M3.75 6.75h.007v.008H3.75V6.75Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0ZM3.75 12h.007v.008H3.75V12Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm-.375 5.25h.007v.008H3.75v-.008Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
     </svg>
   )
 }
 
 export function IconSend({ size = 18, color }: P) {
   return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none"
-         stroke={d(color)} strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round">
-      <line x1={22} y1={2} x2={11} y2={13} />
-      <polygon points="22 2 15 22 11 13 2 9 22 2" />
+    <svg width={size} height={size} viewBox="0 0 24 24" {...base(color)}>
+      <path d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L5.999 12Zm0 0h7.5" />
     </svg>
   )
 }

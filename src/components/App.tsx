@@ -6,13 +6,22 @@ import { TabBar, type Tab } from './ui/TabBar'
 import { HomeScreen } from './screens/HomeScreen'
 import { SearchScreen } from './screens/SearchScreen'
 import { RoomDetailScreen } from './screens/RoomDetailScreen'
+import { FurnitureDetailScreen } from './screens/FurnitureDetailScreen'
 import { ItemDetailScreen } from './screens/ItemDetailScreen'
 import { AddScreen } from './screens/AddScreen'
-import type { Room, FlatItem } from '@/lib/data'
+import type { Room, Furniture, FlatItem } from '@/lib/data'
 
 type StackItem =
   | { type: 'room'; room: Room }
+  | { type: 'furniture'; room: Room; furniture: Furniture }
   | { type: 'item'; item: FlatItem }
+
+const slideIn: React.CSSProperties = {
+  position: 'absolute', inset: 0,
+  background: 'linear-gradient(150deg, #F5EAE0 0%, #FDF8F2 48%, #EDE2D3 100%)',
+  animation: 'slideInRight 0.26s cubic-bezier(0.4,0,0.2,1)',
+  zIndex: 100,
+}
 
 function AllItemsPlaceholder() {
   return (
@@ -22,7 +31,7 @@ function AllItemsPlaceholder() {
       alignItems: 'center', justifyContent: 'center',
       gap: 12, color: 'var(--text-tertiary)',
     }}>
-      <div style={{ fontSize: 48 }}>📦</div>
+      <div className="emoji" style={{ fontSize: 48 }}>📦</div>
       <div style={{ fontWeight: 700, fontSize: 18 }}>全アイテム</div>
       <div style={{ fontSize: 13 }}>準備中…</div>
     </div>
@@ -37,7 +46,7 @@ function SettingsPlaceholder() {
       alignItems: 'center', justifyContent: 'center',
       gap: 12, color: 'var(--text-tertiary)',
     }}>
-      <div style={{ fontSize: 48 }}>⚙️</div>
+      <div className="emoji" style={{ fontSize: 48 }}>⚙️</div>
       <div style={{ fontWeight: 700, fontSize: 18 }}>設定</div>
       <div style={{ fontSize: 13 }}>準備中…</div>
     </div>
@@ -51,6 +60,10 @@ export function App() {
 
   function pushRoom(room: Room) {
     setStack(s => [...s, { type: 'room', room }])
+  }
+
+  function pushFurniture(room: Room, furniture: Furniture) {
+    setStack(s => [...s, { type: 'furniture', room, furniture }])
   }
 
   function pushItem(item: FlatItem) {
@@ -71,11 +84,9 @@ export function App() {
     setStack([])
   }
 
-  const top = stack[stack.length - 1]
-
   return (
     <PhoneShell>
-      {/* Base layer: tab content */}
+      {/* Base layer */}
       {activeTab === 'home' && (
         <HomeScreen
           onRoomClick={pushRoom}
@@ -92,25 +103,29 @@ export function App() {
       {activeTab === 'items' && <AllItemsPlaceholder />}
       {activeTab === 'settings' && <SettingsPlaceholder />}
 
-      {/* Stack overlays */}
+      {/* Navigation stack overlays */}
       {stack.map((frame, i) => {
-        const isTop = i === stack.length - 1
-        if (!isTop) return null
+        if (i !== stack.length - 1) return null
 
         if (frame.type === 'room') {
           return (
-            <div
-              key={i}
-              style={{
-                position: 'absolute', inset: 0,
-                background: 'linear-gradient(150deg, #F5EAE0 0%, #FDF8F2 48%, #EDE2D3 100%)',
-                backgroundAttachment: 'fixed',
-                animation: 'slideInRight 0.26s cubic-bezier(0.4,0,0.2,1)',
-                zIndex: 100,
-              }}
-            >
+            <div key={i} style={slideIn}>
               <RoomDetailScreen
                 room={frame.room}
+                onBack={pop}
+                onItemClick={pushItem}
+                onFurnitureClick={(f) => pushFurniture(frame.room, f)}
+              />
+            </div>
+          )
+        }
+
+        if (frame.type === 'furniture') {
+          return (
+            <div key={i} style={slideIn}>
+              <FurnitureDetailScreen
+                room={frame.room}
+                furniture={frame.furniture}
                 onBack={pop}
                 onItemClick={pushItem}
               />
@@ -120,16 +135,7 @@ export function App() {
 
         if (frame.type === 'item') {
           return (
-            <div
-              key={i}
-              style={{
-                position: 'absolute', inset: 0,
-                background: 'linear-gradient(150deg, #F5EAE0 0%, #FDF8F2 48%, #EDE2D3 100%)',
-                backgroundAttachment: 'fixed',
-                animation: 'slideInRight 0.26s cubic-bezier(0.4,0,0.2,1)',
-                zIndex: 100,
-              }}
-            >
+            <div key={i} style={slideIn}>
               <ItemDetailScreen item={frame.item} onBack={pop} />
             </div>
           )

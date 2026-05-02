@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { expiryStatus, type Room, type Item, type FlatItem } from '@/lib/data'
+import { expiryStatus, type Room, type Furniture, type Item, type FlatItem } from '@/lib/data'
 import { Header } from '@/components/ui/Header'
 import { Badge } from '@/components/ui/Badge'
 import { IconChevronDown, IconPlus, IconGrid, IconList } from '@/components/ui/Icons'
@@ -10,6 +10,7 @@ interface Props {
   room: Room
   onBack: () => void
   onItemClick: (item: FlatItem) => void
+  onFurnitureClick: (furniture: Furniture) => void
 }
 
 // ─── List view (accordion) ────────────────────────────────────────────────
@@ -136,26 +137,23 @@ function ListViewFurniture({
 // ─── Tile view (grid) ────────────────────────────────────────────────────
 
 function TileViewFurniture({
-  room, onItemClick,
-}: { room: Room; onItemClick: (item: FlatItem) => void }) {
-  const [openFurnitureId, setOpenFurnitureId] = useState<string | null>(null)
-
+  room, onItemClick, onFurnitureClick,
+}: { room: Room; onItemClick: (item: FlatItem) => void; onFurnitureClick: (f: Furniture) => void }) {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-      {/* Furniture tiles in 2-column grid */}
+      {/* Furniture tiles in 2-column grid — tap to navigate */}
       <div style={{
         display: 'grid',
         gridTemplateColumns: '1fr 1fr',
         gap: 10,
       }}>
         {room.furniture.map(furniture => {
-          const isOpen = openFurnitureId === furniture.id
           const hasAlert = furniture.items.some(i => expiryStatus(i.expiry) === 'red')
 
           return (
             <button
               key={furniture.id}
-              onClick={() => setOpenFurnitureId(isOpen ? null : furniture.id)}
+              onClick={() => onFurnitureClick(furniture)}
               className="glass"
               style={{
                 borderRadius: 'var(--r-lg)',
@@ -163,10 +161,8 @@ function TileViewFurniture({
                 display: 'flex', flexDirection: 'column',
                 alignItems: 'center', gap: 8,
                 cursor: 'pointer',
-                border: isOpen
-                  ? '1.5px solid var(--accent)'
-                  : '1px solid var(--glass-border)',
-                background: isOpen ? 'rgba(232,168,124,0.10)' : 'var(--glass)',
+                border: '1px solid var(--glass-border)',
+                background: 'var(--glass)',
                 transition: 'var(--ease)',
                 position: 'relative',
               }}
@@ -200,82 +196,6 @@ function TileViewFurniture({
         })}
       </div>
 
-      {/* Expanded items for selected furniture */}
-      {openFurnitureId && (() => {
-        const furniture = room.furniture.find(f => f.id === openFurnitureId)
-        if (!furniture) return null
-        return (
-          <div
-            className="glass"
-            style={{
-              borderRadius: 'var(--r-lg)',
-              padding: '14px 16px',
-              animation: 'fadeUp 0.22s ease',
-            }}
-          >
-            <div style={{
-              fontWeight: 700, fontSize: 13, color: 'var(--text-secondary)',
-              marginBottom: 12, display: 'flex', alignItems: 'center', gap: 6,
-            }}>
-              <span className="emoji">🪑</span> {furniture.name}のアイテム
-            </div>
-            <div style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(3, 1fr)',
-              gap: 8,
-            }}>
-              {furniture.items.map(item => {
-                const status = expiryStatus(item.expiry)
-                return (
-                  <button
-                    key={item.id}
-                    onClick={() => onItemClick({
-                      ...item, path: `${room.name} › ${furniture.name}`,
-                      roomIcon: room.icon, roomId: room.id,
-                      furnitureName: furniture.name, roomName: room.name,
-                    })}
-                    style={{
-                      borderRadius: 'var(--r)',
-                      padding: '10px 8px',
-                      background: 'rgba(255,253,250,0.65)',
-                      border: `1px solid ${status === 'red' ? 'var(--red)' : 'var(--border)'}`,
-                      cursor: 'pointer',
-                      display: 'flex', flexDirection: 'column',
-                      alignItems: 'center', gap: 5,
-                      transition: 'var(--ease-fast)',
-                    }}
-                  >
-                    <div className="emoji" style={{ fontSize: 18 }}>📦</div>
-                    <div style={{
-                      fontSize: 10, fontWeight: 600, textAlign: 'center',
-                      lineHeight: 1.3, color: 'var(--text-primary)',
-                    }}>
-                      {item.name}
-                    </div>
-                    {status === 'red' && (
-                      <div style={{ width: 6, height: 6, borderRadius: '50%', background: 'var(--red)' }} />
-                    )}
-                  </button>
-                )
-              })}
-              {/* Add tile */}
-              <button style={{
-                borderRadius: 'var(--r)',
-                padding: '10px 8px',
-                background: 'transparent',
-                border: '1.5px dashed var(--border-strong)',
-                cursor: 'pointer',
-                display: 'flex', flexDirection: 'column',
-                alignItems: 'center', gap: 5,
-              }}>
-                <div style={{ fontSize: 18, color: 'var(--text-tertiary)' }}>＋</div>
-                <div style={{ fontSize: 10, fontWeight: 600, color: 'var(--text-tertiary)' }}>追加</div>
-              </button>
-            </div>
-          </div>
-        )
-      })()}
-
       {/* Add furniture */}
       <button style={{
         width: '100%', padding: '14px',
@@ -296,7 +216,7 @@ function TileViewFurniture({
 
 // ─── Main screen ─────────────────────────────────────────────────────────
 
-export function RoomDetailScreen({ room, onBack, onItemClick }: Props) {
+export function RoomDetailScreen({ room, onBack, onItemClick, onFurnitureClick }: Props) {
   const [viewMode, setViewMode] = useState<'list' | 'tile'>('list')
   const allItems = room.furniture.flatMap(f => f.items)
   const redCount = allItems.filter(i => expiryStatus(i.expiry) === 'red').length
@@ -368,7 +288,7 @@ export function RoomDetailScreen({ room, onBack, onItemClick }: Props) {
       <div style={{ flex: 1, overflowY: 'auto', padding: '16px 16px 80px' }}>
         {viewMode === 'list'
           ? <ListViewFurniture room={room} onItemClick={onItemClick} />
-          : <TileViewFurniture room={room} onItemClick={onItemClick} />
+          : <TileViewFurniture room={room} onItemClick={onItemClick} onFurnitureClick={onFurnitureClick} />
         }
       </div>
     </div>

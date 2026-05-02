@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { SAMPLE_DATA, expiryStatus, type Room, type GridPos } from '@/lib/data'
+import { SAMPLE_DATA, expiryStatus, type Room, type CanvasPos } from '@/lib/data'
 import { IconSearch, IconEdit, getRoomIcon } from '@/components/ui/Icons'
 
 const GRID_COLS = 4
@@ -22,8 +22,8 @@ export function HomeScreen({ onRoomClick, onSearchFocus }: Props) {
   const rooms = SAMPLE_DATA.rooms
 
   // Layout positions are stored separately so they can be swapped
-  const [layouts, setLayouts] = useState<Record<string, GridPos>>(
-    () => Object.fromEntries(rooms.map(r => [r.id, r.gridPos]))
+  const [layouts, setLayouts] = useState<Record<string, CanvasPos>>(
+    () => Object.fromEntries(rooms.map(r => [r.id, r.canvasPos]))
   )
   const [editMode,   setEditMode]   = useState(false)
   const [selectedId, setSelectedId] = useState<string | null>(null)
@@ -156,7 +156,7 @@ export function HomeScreen({ onRoomClick, onSearchFocus }: Props) {
           gap: '1.5px',
         }}>
           {rooms.map(room => {
-            const { col, row, w, h } = layouts[room.id]
+            const { x, y, w, h } = layouts[room.id]
             const hasAlert = room.furniture
               .flatMap(f => f.items)
               .some(i => expiryStatus(i.expiry) === 'red')
@@ -168,8 +168,8 @@ export function HomeScreen({ onRoomClick, onSearchFocus }: Props) {
                 key={room.id}
                 onClick={() => handleRoomTap(room)}
                 style={{
-                  gridColumn: `${col} / span ${w}`,
-                  gridRow:    `${row} / span ${h}`,
+                  gridColumn: `${x + 1} / span ${w}`,
+                  gridRow:    `${y + 1} / span ${h}`,
                   background: isSelected
                     ? 'rgba(200,145,70,0.22)'
                     : 'rgba(253,248,240,0.93)',

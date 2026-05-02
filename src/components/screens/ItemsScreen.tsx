@@ -23,6 +23,7 @@ export function filterItems(
         path: `${room.name} › ${f.name}`,
         roomIcon: room.icon,
         roomId: room.id,
+        furnitureId: f.id,
         furnitureName: f.name,
         roomName: room.name,
       }))
@@ -170,6 +171,7 @@ function RoomGroup({
                 path: `${room.name} › ${f.name}`,
                 roomIcon: room.icon,
                 roomId: room.id,
+                furnitureId: f.id,
                 furnitureName: f.name,
                 roomName: room.name,
               }

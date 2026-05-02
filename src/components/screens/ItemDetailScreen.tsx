@@ -9,6 +9,7 @@ import { IconEdit, IconTrash, IconMove, IconQR, IconChevronRight, IconBox, getRo
 interface Props {
   item: FlatItem
   onBack: () => void
+  onViewInFloorPlan?: () => void
 }
 
 function MetaCell({ label, value, color }: { label: string; value: string; color?: string }) {
@@ -59,7 +60,7 @@ function ActionBtn({
   )
 }
 
-export function ItemDetailScreen({ item, onBack }: Props) {
+export function ItemDetailScreen({ item, onBack, onViewInFloorPlan }: Props) {
   const [showMove, setShowMove] = useState(false)
   const status = expiryStatus(item.expiry)
   const days = daysUntilExpiry(item.expiry)
@@ -182,11 +183,48 @@ export function ItemDetailScreen({ item, onBack }: Props) {
         </div>
 
         {/* Action buttons */}
-        <div style={{ display: 'flex', gap: 10, padding: '0 16px', marginBottom: 16 }}>
+        <div style={{ display: 'flex', gap: 10, padding: '0 16px', marginBottom: 10 }}>
           <ActionBtn label="移動する"   Icon={IconMove}  onClick={() => setShowMove(true)} color="var(--accent-dark)" bg="var(--accent-light)" />
           <ActionBtn label="処分する"   Icon={IconTrash} onClick={undefined}                 color="var(--red)"        bg="var(--red-light)"   />
           <ActionBtn label="編集する"   Icon={IconEdit}  onClick={undefined}                 color="var(--text-secondary)" bg="rgba(196,168,130,0.10)" />
         </div>
+
+        {/* View in floor plan */}
+        {onViewInFloorPlan && (
+          <div style={{ padding: '0 16px', marginBottom: 16 }}>
+            <button
+              onClick={onViewInFloorPlan}
+              style={{
+                width: '100%',
+                padding: '12px 16px',
+                borderRadius: 'var(--r)',
+                border: '1.5px solid var(--glass-warm-border)',
+                background: 'var(--glass-warm)',
+                backdropFilter: 'blur(14px)',
+                WebkitBackdropFilter: 'blur(14px)',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: 10,
+                fontFamily: 'var(--font-rounded)',
+              }}
+            >
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent-dark)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                <rect x="2" y="2" width="8" height="8" rx="1.5" />
+                <rect x="14" y="2" width="8" height="4" rx="1.5" />
+                <rect x="14" y="10" width="3" height="3" rx="1" />
+                <rect x="2" y="14" width="8" height="4" rx="1.5" />
+                <rect x="14" y="16" width="8" height="6" rx="1.5" />
+              </svg>
+              <span style={{ fontSize: 14, fontWeight: 700, color: 'var(--accent-dark)' }}>
+                間取り図で見る
+              </span>
+              <span style={{ marginLeft: 'auto', fontSize: 12, color: 'var(--text-tertiary)', fontWeight: 600 }}>
+                {item.roomName} › {item.furnitureName}
+              </span>
+            </button>
+          </div>
+        )}
 
         {/* Move history */}
         <div style={{ margin: '0 16px 24px' }}>

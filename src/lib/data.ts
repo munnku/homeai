@@ -125,6 +125,7 @@ export type FlatItem = Item & {
   path: string
   roomIcon: string
   roomId: string
+  furnitureId: string
   furnitureName: string
   roomName: string
 }
@@ -136,6 +137,7 @@ export const ALL_ITEMS_FLAT: FlatItem[] = SAMPLE_DATA.rooms.flatMap(room =>
       path: `${room.name} › ${f.name}`,
       roomIcon: room.icon,
       roomId: room.id,
+      furnitureId: f.id,
       furnitureName: f.name,
       roomName: room.name,
     }))

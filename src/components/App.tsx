@@ -12,7 +12,7 @@ import { ItemDetailScreen } from './screens/ItemDetailScreen'
 import { AddScreen } from './screens/AddScreen'
 import { ItemsScreen } from './screens/ItemsScreen'
 import { SettingsScreen } from './screens/SettingsScreen'
-import type { Room, Furniture, FlatItem } from '@/lib/data'
+import { SAMPLE_DATA, type Room, type Furniture, type FlatItem } from '@/lib/data'
 
 type StackItem =
   | { type: 'room'; room: Room; highlightFurnitureId?: string }
@@ -97,7 +97,17 @@ export function App() {
         if (frame.type === 'item') {
           return (
             <div key={i} style={slideIn}>
-              <ItemDetailScreen item={frame.item} onBack={pop} />
+              <ItemDetailScreen
+                item={frame.item}
+                onBack={pop}
+                onViewInFloorPlan={() => {
+                  const room = SAMPLE_DATA.rooms.find(r => r.id === frame.item.roomId)
+                  if (room) {
+                    pop()
+                    pushRoom(room, frame.item.furnitureId)
+                  }
+                }}
+              />
             </div>
           )
         }

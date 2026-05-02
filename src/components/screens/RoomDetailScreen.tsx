@@ -77,6 +77,7 @@ function ListViewFurniture({
                     onClick={() => onItemClick({
                       ...item, path: `${room.name} › ${furniture.name}`,
                       roomIcon: room.icon, roomId: room.id,
+                      furnitureId: furniture.id,
                       furnitureName: furniture.name, roomName: room.name,
                     })}
                     style={{

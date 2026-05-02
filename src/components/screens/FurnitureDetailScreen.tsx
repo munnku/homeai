@@ -48,6 +48,7 @@ export function FurnitureDetailScreen({ room, furniture, onBack, onItemClick }: 
                   path: `${room.name} › ${furniture.name}`,
                   roomIcon: room.icon,
                   roomId: room.id,
+                  furnitureId: furniture.id,
                   furnitureName: furniture.name,
                   roomName: room.name,
                 })}

@@ -1,6 +1,8 @@
 // Thin-line outline icons — strokeWidth 1.5, fill="none" throughout
 // All icons default to var(--icon); override with color prop for active/semantic states.
 
+import type { JSX } from 'react'
+
 type P = { size?: number; color?: string }
 
 const c = (color?: string) => color ?? 'var(--icon)'
@@ -11,6 +13,8 @@ const base = (color?: string) => ({
   strokeLinecap: 'round' as const,
   strokeLinejoin: 'round' as const,
 })
+
+// ─── Navigation & UI ─────────────────────────────
 
 export function IconHome({ size = 22, color }: P) {
   return (
@@ -146,4 +150,94 @@ export function IconSend({ size = 18, color }: P) {
       <path d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L5.999 12Zm0 0h7.5" />
     </svg>
   )
+}
+
+// ─── Room icons ───────────────────────────────────
+
+export function IconLivingRoom({ size = 22, color }: P) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" {...base(color)}>
+      <path d="M4 11V8a1 1 0 011-1h14a1 1 0 011 1v3" />
+      <path d="M2 11a2 2 0 012 2v3h16v-3a2 2 0 012-2" />
+      <path d="M7 16v2.5M17 16v2.5" />
+    </svg>
+  )
+}
+
+export function IconKitchen({ size = 22, color }: P) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" {...base(color)}>
+      <rect x="2" y="4" width="20" height="17" rx="1.5" />
+      <circle cx="8.5" cy="10.5" r="2" />
+      <circle cx="15.5" cy="10.5" r="2" />
+      <path d="M6 17h12" />
+    </svg>
+  )
+}
+
+export function IconBedroom({ size = 22, color }: P) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" {...base(color)}>
+      <path d="M2 19v-6l.5-1A2 2 0 014.3 11h15.4a2 2 0 011.8 1l.5 1v6" />
+      <path d="M2 15.5h20" />
+      <path d="M7 11V8.5a.5.5 0 01.5-.5h3a.5.5 0 01.5.5V11" />
+    </svg>
+  )
+}
+
+export function IconBathroom({ size = 22, color }: P) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" {...base(color)}>
+      <path d="M4 12h16M4 12a2 2 0 00-2 2v2.5a2 2 0 002 2h16a2 2 0 002-2V14a2 2 0 00-2-2M6 12V7a2 2 0 014 0" />
+      <circle cx="17" cy="4" r="1" />
+      <path d="M15.5 5.5l3-3" />
+    </svg>
+  )
+}
+
+export function IconKidsRoom({ size = 22, color }: P) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" {...base(color)}>
+      <path d="M12 2l2.09 6.41H21l-5.45 3.96 2.09 6.42L12 14.84l-5.64 4.05 2.09-6.42L3 8.41h6.91L12 2z" />
+    </svg>
+  )
+}
+
+export function IconStorage({ size = 22, color }: P) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" {...base(color)}>
+      <rect x="3" y="2" width="18" height="20" rx="1" />
+      <path d="M3 8h18M3 14h18" />
+      <path d="M9 8v6M15 8v6" />
+    </svg>
+  )
+}
+
+// ─── AI / special ─────────────────────────────────
+
+export function IconSparkle({ size = 22, color }: P) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" {...base(color)}>
+      <path d="M12 3l1.8 5.4L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.6L12 3z" />
+      <path d="M19 14l.9 2.7 2.7.9-2.7.9L19 21l-.9-2.7-2.7-.9 2.7-.9L19 14z" />
+      <path d="M5 17l.6 1.7 1.7.6-1.7.6L5 21.6l-.6-1.7-1.7-.6 1.7-.6L5 17z" />
+    </svg>
+  )
+}
+
+// ─── Icon lookup ──────────────────────────────────
+
+export type RoomIconKey = 'living' | 'kitchen' | 'bedroom' | 'bathroom' | 'child' | 'storage'
+
+const ROOM_ICON_MAP: Record<string, (props: P) => JSX.Element> = {
+  living:   IconLivingRoom,
+  kitchen:  IconKitchen,
+  bedroom:  IconBedroom,
+  bathroom: IconBathroom,
+  child:    IconKidsRoom,
+  storage:  IconStorage,
+}
+
+export function getRoomIcon(key: string): (props: P) => JSX.Element {
+  return ROOM_ICON_MAP[key] ?? IconStorage
 }

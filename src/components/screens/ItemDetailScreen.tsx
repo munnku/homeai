@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { expiryStatus, daysUntilExpiry, SAMPLE_DATA, type FlatItem } from '@/lib/data'
 import { Header } from '@/components/ui/Header'
 import { Badge } from '@/components/ui/Badge'
-import { IconEdit, IconTrash, IconMove, IconQR, IconChevronRight } from '@/components/ui/Icons'
+import { IconEdit, IconTrash, IconMove, IconQR, IconChevronRight, IconBox, getRoomIcon } from '@/components/ui/Icons'
 
 interface Props {
   item: FlatItem
@@ -93,7 +93,7 @@ export function ItemDetailScreen({ item, onBack }: Props) {
           gap: 8, cursor: 'pointer',
           border: '1.5px dashed var(--border-strong)',
         }}>
-          <span className="emoji" style={{ fontSize: 36 }}>📦</span>
+          <IconBox size={40} color="var(--text-tertiary)" />
           <span style={{ fontSize: 12, color: 'var(--text-tertiary)', fontWeight: 600 }}>
             タップして写真を追加
           </span>
@@ -256,7 +256,7 @@ export function ItemDetailScreen({ item, onBack }: Props) {
                   cursor: 'pointer',
                 }}
               >
-                <span className="emoji" style={{ fontSize: 20 }}>{r.icon}</span>
+                {(() => { const I = getRoomIcon(r.icon); return <I size={18} color="#A05830" /> })()}
                 <span style={{ fontWeight: 600 }}>{r.name}</span>
               </div>
             ))}

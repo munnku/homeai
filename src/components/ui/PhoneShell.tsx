@@ -62,10 +62,10 @@ export function PhoneShell({ children }: { children: React.ReactNode }) {
             <span>9:41</span>
             <span>●●●</span>
           </div>
-          {/* Content */}
+          {/* Content — starts below status bar so children never overlap the notch */}
           <div style={{
-            position: 'absolute', inset: 0, paddingTop: 44,
-            overflow: 'hidden', height: '100%',
+            position: 'absolute', top: 44, left: 0, right: 0, bottom: 0,
+            overflow: 'hidden',
           }}>
             {children}
           </div>

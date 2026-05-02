@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { expiryStatus, type Room, type Furniture, type Item, type FlatItem } from '@/lib/data'
 import { Header } from '@/components/ui/Header'
 import { Badge } from '@/components/ui/Badge'
-import { IconChevronDown, IconPlus, IconGrid, IconList } from '@/components/ui/Icons'
+import { IconChevronDown, IconPlus, IconGrid, IconList, IconBox, getRoomIcon } from '@/components/ui/Icons'
 
 interface Props {
   room: Room
@@ -42,12 +42,12 @@ function ListViewFurniture({
           >
             <div style={{
               width: 38, height: 38, borderRadius: 'var(--r-sm)',
-              background: 'rgba(232,168,124,0.12)',
+              background: 'rgba(160,88,48,0.10)',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
-              fontSize: 18, flexShrink: 0,
+              flexShrink: 0,
             }}>
-              <span className="emoji">🪑</span>
-</div>
+              <IconBox size={18} color="#A05830" />
+            </div>
             <div style={{ flex: 1 }}>
               <div style={{ fontWeight: 700, fontSize: 14 }}>{furniture.name}</div>
               <div style={{ fontSize: 12, color: 'var(--text-tertiary)', marginTop: 1 }}>
@@ -88,12 +88,14 @@ function ListViewFurniture({
                       cursor: 'pointer', textAlign: 'left',
                     }}
                   >
-                    <div className="emoji" style={{
+                    <div style={{
                       width: 34, height: 34, borderRadius: 9,
-                      background: 'rgba(196,168,130,0.12)',
+                      background: 'rgba(160,88,48,0.10)',
                       display: 'flex', alignItems: 'center', justifyContent: 'center',
-                      fontSize: 16, flexShrink: 0,
-                    }}>📦</div>
+                      flexShrink: 0,
+                    }}>
+                      <IconBox size={16} color="#A05830" />
+                    </div>
                     <div style={{ flex: 1, minWidth: 0 }}>
                       <div style={{
                         fontWeight: 600, fontSize: 13,
@@ -174,12 +176,13 @@ function TileViewFurniture({
                   background: 'var(--red)',
                 }} />
               )}
-              <div className="emoji" style={{
+              <div style={{
                 width: 48, height: 48, borderRadius: 'var(--r)',
-                background: 'rgba(232,168,124,0.14)',
+                background: 'rgba(160,88,48,0.10)',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
-                fontSize: 24,
-              }}>🪑</div>
+              }}>
+                <IconBox size={24} color="#A05830" />
+              </div>
               <div style={{
                 fontWeight: 700, fontSize: 13, textAlign: 'center',
                 color: 'var(--text-primary)', lineHeight: 1.3,
@@ -225,7 +228,7 @@ export function RoomDetailScreen({ room, onBack, onItemClick, onFurnitureClick }
   return (
     <div style={{ position: 'absolute', inset: 0, background: 'transparent', display: 'flex', flexDirection: 'column' }}>
       <Header
-        title={`${room.icon} ${room.name}`}
+        title={room.name}
         onBack={onBack}
         right={
           <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
@@ -272,7 +275,7 @@ export function RoomDetailScreen({ room, onBack, onItemClick, onFurnitureClick }
           background: redCount > 0 ? 'var(--red-light)' : 'var(--yellow-light)',
           display: 'flex', alignItems: 'center', gap: 8,
         }}>
-          <span style={{ fontSize: 16 }}>{redCount > 0 ? '⚠️' : '⏰'}</span>
+          <span style={{ fontSize: 16, color: redCount > 0 ? 'var(--red)' : 'var(--yellow)' }}>!</span>
           <span style={{
             fontSize: 12, fontWeight: 600,
             color: redCount > 0 ? 'var(--red)' : 'var(--yellow)',

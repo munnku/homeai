@@ -33,7 +33,7 @@ export const SAMPLE_DATA: { household: string; rooms: Room[] } = {
   household: '田中家',
   rooms: [
     {
-      id: 'living', name: 'リビング', icon: '🛋️',
+      id: 'living', name: 'リビング', icon: 'living',
       gridPos: { col: 1, row: 1, w: 2, h: 2 }, itemCount: 34,
       furniture: [
         { id: 'tv-shelf', name: 'テレビ台', items: [
@@ -48,7 +48,7 @@ export const SAMPLE_DATA: { household: string; rooms: Room[] } = {
       ],
     },
     {
-      id: 'kitchen', name: 'キッチン', icon: '🍳',
+      id: 'kitchen', name: 'キッチン', icon: 'kitchen',
       gridPos: { col: 3, row: 1, w: 2, h: 1 }, itemCount: 52,
       furniture: [
         { id: 'refrigerator', name: '冷蔵庫', items: [
@@ -62,7 +62,7 @@ export const SAMPLE_DATA: { household: string; rooms: Room[] } = {
       ],
     },
     {
-      id: 'bedroom', name: '寝室', icon: '🛏️',
+      id: 'bedroom', name: '寝室', icon: 'bedroom',
       gridPos: { col: 1, row: 3, w: 2, h: 1 }, itemCount: 18,
       furniture: [
         { id: 'wardrobe', name: 'クローゼット', items: [
@@ -72,7 +72,7 @@ export const SAMPLE_DATA: { household: string; rooms: Room[] } = {
       ],
     },
     {
-      id: 'bathroom', name: '洗面所', icon: '🚿',
+      id: 'bathroom', name: '洗面所', icon: 'bathroom',
       gridPos: { col: 3, row: 2, w: 1, h: 1 }, itemCount: 21,
       furniture: [
         { id: 'cabinet', name: '洗面台下収納', items: [
@@ -82,7 +82,7 @@ export const SAMPLE_DATA: { household: string; rooms: Room[] } = {
       ],
     },
     {
-      id: 'child', name: '子供部屋', icon: '🧸',
+      id: 'child', name: '子供部屋', icon: 'child',
       gridPos: { col: 4, row: 2, w: 1, h: 2 }, itemCount: 47,
       furniture: [
         { id: 'toy-box', name: 'おもちゃ箱', items: [
@@ -92,7 +92,7 @@ export const SAMPLE_DATA: { household: string; rooms: Room[] } = {
       ],
     },
     {
-      id: 'storage', name: '納戸', icon: '📦',
+      id: 'storage', name: '納戸', icon: 'storage',
       gridPos: { col: 3, row: 3, w: 1, h: 1 }, itemCount: 63,
       furniture: [
         { id: 'shelf-a', name: '棚A', items: [

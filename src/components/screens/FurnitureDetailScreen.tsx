@@ -3,7 +3,7 @@
 import { expiryStatus, type Room, type Furniture, type FlatItem } from '@/lib/data'
 import { Header } from '@/components/ui/Header'
 import { Badge } from '@/components/ui/Badge'
-import { IconPlus } from '@/components/ui/Icons'
+import { IconPlus, IconBox, getRoomIcon } from '@/components/ui/Icons'
 
 interface Props {
   room: Room
@@ -26,7 +26,7 @@ export function FurnitureDetailScreen({ room, furniture, onBack, onItemClick }: 
           fontSize: 12, color: 'var(--text-tertiary)', fontWeight: 600,
           marginBottom: 20, display: 'flex', alignItems: 'center', gap: 4,
         }}>
-          <span className="emoji">{room.icon}</span>
+          {(() => { const I = getRoomIcon(room.icon); return <I size={14} color="#A05830" /> })()}
           <span>{room.name}</span>
           <span style={{ margin: '0 2px' }}>›</span>
           <span style={{ color: 'var(--text-secondary)' }}>{furniture.name}</span>
@@ -70,7 +70,13 @@ export function FurnitureDetailScreen({ room, furniture, onBack, onItemClick }: 
                     background: 'var(--red)',
                   }} />
                 )}
-                <div className="emoji" style={{ fontSize: 26 }}>📦</div>
+                <div style={{
+                  width: 40, height: 40, borderRadius: 'var(--r-sm)',
+                  background: 'rgba(160,88,48,0.10)',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                }}>
+                  <IconBox size={20} color="#A05830" />
+                </div>
                 <div style={{
                   fontSize: 11, fontWeight: 600, textAlign: 'center',
                   color: 'var(--text-primary)', lineHeight: 1.35,

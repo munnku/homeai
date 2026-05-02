@@ -1,6 +1,6 @@
 'use client'
 
-import { IconHome, IconSearch, IconBox, IconSettings, IconPlus } from './Icons'
+import { IconHome, IconSparkle, IconBox, IconSettings, IconPlus } from './Icons'
 
 export type Tab = 'home' | 'search' | 'items' | 'settings'
 
@@ -16,7 +16,7 @@ type TabEntry =
 
 const tabs: TabEntry[] = [
   { kind: 'tab', id: 'home',     label: 'ホーム',   Icon: IconHome },
-  { kind: 'tab', id: 'search',   label: '検索',     Icon: IconSearch },
+  { kind: 'tab', id: 'search',   label: 'AIチャット', Icon: IconSparkle },
   { kind: 'fab' },
   { kind: 'tab', id: 'items',    label: 'アイテム', Icon: IconBox },
   { kind: 'tab', id: 'settings', label: '設定',     Icon: IconSettings },

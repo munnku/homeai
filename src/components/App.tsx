@@ -9,6 +9,8 @@ import { RoomDetailScreen } from './screens/RoomDetailScreen'
 import { FurnitureDetailScreen } from './screens/FurnitureDetailScreen'
 import { ItemDetailScreen } from './screens/ItemDetailScreen'
 import { AddScreen } from './screens/AddScreen'
+import { ItemsScreen } from './screens/ItemsScreen'
+import { SettingsScreen } from './screens/SettingsScreen'
 import type { Room, Furniture, FlatItem } from '@/lib/data'
 
 type StackItem =
@@ -23,35 +25,6 @@ const slideIn: React.CSSProperties = {
   zIndex: 100,
 }
 
-function AllItemsPlaceholder() {
-  return (
-    <div style={{
-      position: 'absolute', inset: 0,
-      display: 'flex', flexDirection: 'column',
-      alignItems: 'center', justifyContent: 'center',
-      gap: 12, color: 'var(--text-tertiary)',
-    }}>
-      <div className="emoji" style={{ fontSize: 48 }}>📦</div>
-      <div style={{ fontWeight: 700, fontSize: 18 }}>全アイテム</div>
-      <div style={{ fontSize: 13 }}>準備中…</div>
-    </div>
-  )
-}
-
-function SettingsPlaceholder() {
-  return (
-    <div style={{
-      position: 'absolute', inset: 0,
-      display: 'flex', flexDirection: 'column',
-      alignItems: 'center', justifyContent: 'center',
-      gap: 12, color: 'var(--text-tertiary)',
-    }}>
-      <div className="emoji" style={{ fontSize: 48 }}>⚙️</div>
-      <div style={{ fontWeight: 700, fontSize: 18 }}>設定</div>
-      <div style={{ fontSize: 13 }}>準備中…</div>
-    </div>
-  )
-}
 
 export function App() {
   const [activeTab, setActiveTab] = useState<Tab>('home')
@@ -79,29 +52,19 @@ export function App() {
     setStack([])
   }
 
-  function handleSearchFocus() {
-    setActiveTab('search')
-    setStack([])
-  }
-
   return (
     <PhoneShell>
       {/* Base layer */}
       {activeTab === 'home' && (
         <HomeScreen
           onRoomClick={pushRoom}
-          onSearchFocus={handleSearchFocus}
+          onSearchFocus={() => handleTabChange('search')}
           onAddClick={() => setShowAdd(true)}
         />
       )}
-      {activeTab === 'search' && (
-        <SearchScreen
-          onItemClick={pushItem}
-          initialFocus={activeTab === 'search' && stack.length === 0}
-        />
-      )}
-      {activeTab === 'items' && <AllItemsPlaceholder />}
-      {activeTab === 'settings' && <SettingsPlaceholder />}
+      {activeTab === 'search' && <SearchScreen />}
+      {activeTab === 'items' && <ItemsScreen onItemClick={pushItem} />}
+      {activeTab === 'settings' && <SettingsScreen />}
 
       {/* Navigation stack overlays */}
       {stack.map((frame, i) => {

@@ -6,6 +6,7 @@ import { fitToScreen, GRID_UNIT, type Viewport } from '@/lib/canvas'
 import type { CanvasPos } from '@/lib/data'
 import { ZoomPanControls } from './ZoomPanControls'
 import { GridBackground } from './GridBackground'
+import { CanvasContext } from './CanvasContext'
 
 interface Props {
   tiles: CanvasPos[]
@@ -53,8 +54,11 @@ export function CanvasEngine({ tiles, editMode = false, children }: Props) {
 
   useGesture(
     {
-      onDrag: ({ delta: [dx, dy], touches, canceled }) => {
+      onDrag: ({ event, delta: [dx, dy], touches, canceled }) => {
         if (canceled || touches > 1) return
+        // Don't pan when drag originates from a tile in edit mode
+        const target = event?.target as HTMLElement | null
+        if (editMode && target?.closest('[data-tile]')) return
         setViewport(v => ({ ...v, offsetX: v.offsetX + dx, offsetY: v.offsetY + dy }))
       },
       onPinch: ({ offset: [scale], origin: [ox, oy], first, memo }) => {
@@ -78,36 +82,38 @@ export function CanvasEngine({ tiles, editMode = false, children }: Props) {
   )
 
   return (
-    <div
-      ref={containerRef}
-      style={{
-        position: 'relative',
-        overflow: 'hidden',
-        width: '100%',
-        height: '100%',
-        touchAction: 'none',
-        userSelect: 'none',
-      }}
-    >
+    <CanvasContext.Provider value={{ zoom: viewport.zoom, editMode }}>
       <div
+        ref={containerRef}
         style={{
-          transform: `translate(${viewport.offsetX}px, ${viewport.offsetY}px) scale(${viewport.zoom})`,
-          transformOrigin: '0 0',
-          position: 'absolute',
-          willChange: 'transform',
-          width: canvasW,
-          height: canvasH,
+          position: 'relative',
+          overflow: 'hidden',
+          width: '100%',
+          height: '100%',
+          touchAction: 'none',
+          userSelect: 'none',
         }}
       >
-        {editMode && <GridBackground />}
-        {children}
+        <div
+          style={{
+            transform: `translate(${viewport.offsetX}px, ${viewport.offsetY}px) scale(${viewport.zoom})`,
+            transformOrigin: '0 0',
+            position: 'absolute',
+            willChange: 'transform',
+            width: canvasW,
+            height: canvasH,
+          }}
+        >
+          {editMode && <GridBackground />}
+          {children}
+        </div>
+        <ZoomPanControls
+          zoom={viewport.zoom}
+          onZoomIn={() => zoomAtCenter(0.25)}
+          onZoomOut={() => zoomAtCenter(-0.25)}
+          onFitAll={fitAll}
+        />
       </div>
-      <ZoomPanControls
-        zoom={viewport.zoom}
-        onZoomIn={() => zoomAtCenter(0.25)}
-        onZoomOut={() => zoomAtCenter(-0.25)}
-        onFitAll={fitAll}
-      />
-    </div>
+    </CanvasContext.Provider>
   )
 }

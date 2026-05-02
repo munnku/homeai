@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { SAMPLE_DATA, expiryStatus, type Room } from '@/lib/data'
+import { SAMPLE_DATA, expiryStatus, type Room, type CanvasPos } from '@/lib/data'
 import { getRoomIcon } from '@/components/ui/Icons'
 import { CanvasEngine } from '@/components/canvas/CanvasEngine'
 import { CanvasTile } from '@/components/canvas/CanvasTile'
@@ -19,12 +19,19 @@ function RoomIcon({ iconKey, size }: { iconKey: string; size: number }) {
 export function FloorPlanScreen({ onRoomClick }: Props) {
   const rooms = SAMPLE_DATA.rooms
   const [editMode, setEditMode] = useState(false)
+  const [positions, setPositions] = useState<Record<string, CanvasPos>>(
+    () => Object.fromEntries(rooms.map(r => [r.id, r.canvasPos]))
+  )
 
   const alertCount = rooms
     .flatMap(r => r.furniture.flatMap(f => f.items))
     .filter(i => expiryStatus(i.expiry) === 'red').length
 
-  const tilePosArr = rooms.map(r => r.canvasPos)
+  const tilePosArr = rooms.map(r => positions[r.id])
+
+  function moveRoom(id: string, newPos: CanvasPos) {
+    setPositions(prev => ({ ...prev, [id]: newPos }))
+  }
 
   return (
     <div style={{
@@ -86,13 +93,13 @@ export function FloorPlanScreen({ onRoomClick }: Props) {
             return (
               <CanvasTile
                 key={room.id}
-                pos={room.canvasPos}
+                pos={positions[room.id]}
                 label={room.name}
-                icon={<RoomIcon iconKey={room.icon} size={room.canvasPos.h >= 2 ? 26 : 18} />}
+                icon={<RoomIcon iconKey={room.icon} size={positions[room.id].h >= 2 ? 26 : 18} />}
                 badge={`${room.itemCount}点`}
                 hasAlert={hasAlert}
-                editMode={editMode}
                 onTap={() => onRoomClick(room)}
+                onMove={(newPos) => moveRoom(room.id, newPos)}
               />
             )
           })}

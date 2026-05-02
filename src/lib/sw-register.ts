@@ -1,14 +1,20 @@
 'use client'
 
-export async function registerServiceWorker() {
+export function registerServiceWorker() {
   if (typeof window === 'undefined' || !('serviceWorker' in navigator)) return
 
-  try {
-    const reg = await navigator.serviceWorker.register('/sw.js')
-    console.log('SW registered:', reg.scope)
-    return reg
-  } catch (err) {
-    console.error('SW registration failed:', err)
+  const register = async () => {
+    try {
+      await navigator.serviceWorker.register('/sw.js')
+    } catch (err) {
+      console.error('SW registration failed:', err)
+    }
+  }
+
+  if ('requestIdleCallback' in window) {
+    requestIdleCallback(() => { void register() })
+  } else {
+    setTimeout(() => { void register() }, 1)
   }
 }
 

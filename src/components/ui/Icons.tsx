@@ -213,6 +213,85 @@ export function IconStorage({ size = 22, color }: P) {
   )
 }
 
+// ─── Furniture ────────────────────────────────────
+
+export function IconSofa({ size = 22, color }: P) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" {...base(color)}>
+      <rect x="2" y="10" width="20" height="8" rx="2" />
+      <path d="M5 10V8a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v2" />
+      <path d="M5 18v2M19 18v2" />
+      <rect x="2" y="13" width="3" height="5" rx="1" />
+      <rect x="19" y="13" width="3" height="5" rx="1" />
+    </svg>
+  )
+}
+
+export function IconDesk({ size = 22, color }: P) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" {...base(color)}>
+      <rect x="2" y="8" width="20" height="3" rx="1" />
+      <path d="M5 11v7M19 11v7" />
+    </svg>
+  )
+}
+
+export function IconBed({ size = 22, color }: P) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" {...base(color)}>
+      <path d="M2 7v10M22 7v10" />
+      <path d="M2 12h20" />
+      <rect x="4" y="12" width="16" height="5" rx="1" />
+      <rect x="4" y="8" width="5" height="4" rx="1" />
+    </svg>
+  )
+}
+
+export function IconShelf({ size = 22, color }: P) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" {...base(color)}>
+      <rect x="3" y="3" width="18" height="18" rx="1" />
+      <path d="M3 9h18M3 15h18" />
+      <path d="M9 3v6M15 3v6M9 15v6M15 15v6" />
+    </svg>
+  )
+}
+
+export function IconFridge({ size = 22, color }: P) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" {...base(color)}>
+      <rect x="5" y="2" width="14" height="20" rx="2" />
+      <path d="M5 10h14" />
+      <path d="M9 6v2M9 14v4" />
+    </svg>
+  )
+}
+
+export function IconDrawer({ size = 22, color }: P) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" {...base(color)}>
+      <rect x="3" y="3" width="18" height="18" rx="1" />
+      <path d="M3 10h18M3 17h18" />
+      <path d="M10 6.5h4M10 13.5h4M10 20.5h4" />
+    </svg>
+  )
+}
+
+export type FurnitureIconKey = 'sofa' | 'desk' | 'bed' | 'shelf' | 'fridge' | 'drawer'
+
+const FURNITURE_ICON_MAP: Record<string, (props: P) => JSX.Element> = {
+  sofa:   IconSofa,
+  desk:   IconDesk,
+  bed:    IconBed,
+  shelf:  IconShelf,
+  fridge: IconFridge,
+  drawer: IconDrawer,
+}
+
+export function getFurnitureIcon(key: string): (props: P) => JSX.Element {
+  return FURNITURE_ICON_MAP[key] ?? IconShelf
+}
+
 // ─── AI / special ─────────────────────────────────
 
 export function IconSparkle({ size = 22, color }: P) {

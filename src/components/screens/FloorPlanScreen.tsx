@@ -5,7 +5,18 @@ import { SAMPLE_DATA, expiryStatus, type Room, type CanvasPos } from '@/lib/data
 import { getRoomIcon } from '@/components/ui/Icons'
 import { CanvasEngine } from '@/components/canvas/CanvasEngine'
 import { CanvasTile } from '@/components/canvas/CanvasTile'
+import { EdgeHandles } from '@/components/canvas/EdgeHandles'
 import { EditModeButton } from '@/components/canvas/EditModeButton'
+import { AddTileButton } from '@/components/canvas/AddTileModal'
+
+interface RoomTile {
+  id: string
+  name: string
+  icon: string
+  pos: CanvasPos
+  itemCount: number
+  roomRef: Room | null
+}
 
 interface Props {
   onRoomClick: (room: Room) => void
@@ -19,18 +30,28 @@ function RoomIcon({ iconKey, size }: { iconKey: string; size: number }) {
 export function FloorPlanScreen({ onRoomClick }: Props) {
   const rooms = SAMPLE_DATA.rooms
   const [editMode, setEditMode] = useState(false)
-  const [positions, setPositions] = useState<Record<string, CanvasPos>>(
-    () => Object.fromEntries(rooms.map(r => [r.id, r.canvasPos]))
+
+  const [tiles, setTiles] = useState<RoomTile[]>(
+    () => rooms.map(r => ({ id: r.id, name: r.name, icon: r.icon, pos: r.canvasPos, itemCount: r.itemCount, roomRef: r }))
   )
 
   const alertCount = rooms
     .flatMap(r => r.furniture.flatMap(f => f.items))
     .filter(i => expiryStatus(i.expiry) === 'red').length
 
-  const tilePosArr = rooms.map(r => positions[r.id])
+  const tilePosArr = tiles.map(t => t.pos)
 
   function moveRoom(id: string, newPos: CanvasPos) {
-    setPositions(prev => ({ ...prev, [id]: newPos }))
+    setTiles(prev => prev.map(t => t.id === id ? { ...t, pos: newPos } : t))
+  }
+
+  function resizeRoom(id: string, newPos: CanvasPos) {
+    setTiles(prev => prev.map(t => t.id === id ? { ...t, pos: newPos } : t))
+  }
+
+  function addRoom(name: string, icon: string, pos: CanvasPos) {
+    const id = `room-${Date.now()}`
+    setTiles(prev => [...prev, { id, name, icon, pos, itemCount: 0, roomRef: null }])
   }
 
   return (
@@ -79,33 +100,34 @@ export function FloorPlanScreen({ onRoomClick }: Props) {
       </div>
 
       {/* Canvas area */}
-      <div style={{
-        flex: 1,
-        paddingBottom: 'var(--tab-bar-h)',
-        position: 'relative',
-      }}>
+      <div style={{ flex: 1, paddingBottom: 'var(--tab-bar-h)', position: 'relative' }}>
         <CanvasEngine tiles={tilePosArr} editMode={editMode}>
-          {rooms.map(room => {
-            const hasAlert = room.furniture
+          {tiles.map(tile => {
+            const hasAlert = tile.roomRef?.furniture
               .flatMap(f => f.items)
-              .some(i => expiryStatus(i.expiry) === 'red')
+              .some(i => expiryStatus(i.expiry) === 'red') ?? false
 
             return (
               <CanvasTile
-                key={room.id}
-                pos={positions[room.id]}
-                label={room.name}
-                icon={<RoomIcon iconKey={room.icon} size={positions[room.id].h >= 2 ? 26 : 18} />}
-                badge={`${room.itemCount}点`}
+                key={tile.id}
+                pos={tile.pos}
+                label={tile.name}
+                icon={<RoomIcon iconKey={tile.icon} size={tile.pos.h >= 2 ? 26 : 18} />}
+                badge={tile.itemCount > 0 ? `${tile.itemCount}点` : undefined}
                 hasAlert={hasAlert}
-                onTap={() => onRoomClick(room)}
-                onMove={(newPos) => moveRoom(room.id, newPos)}
-              />
+                onTap={tile.roomRef ? () => onRoomClick(tile.roomRef!) : undefined}
+                onMove={(newPos) => moveRoom(tile.id, newPos)}
+              >
+                {editMode && (
+                  <EdgeHandles pos={tile.pos} onResize={(newPos) => resizeRoom(tile.id, newPos)} />
+                )}
+              </CanvasTile>
             )
           })}
         </CanvasEngine>
 
         <EditModeButton editMode={editMode} onToggle={() => setEditMode(p => !p)} />
+        {editMode && <AddTileButton kind="room" onAdd={addRoom} />}
       </div>
     </div>
   )

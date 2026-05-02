@@ -45,8 +45,8 @@ function ListViewFurniture({
               display: 'flex', alignItems: 'center', justifyContent: 'center',
               fontSize: 18, flexShrink: 0,
             }}>
-              🪑
-            </div>
+              <span className="emoji">🪑</span>
+</div>
             <div style={{ flex: 1 }}>
               <div style={{ fontWeight: 700, fontSize: 14 }}>{furniture.name}</div>
               <div style={{ fontSize: 12, color: 'var(--text-tertiary)', marginTop: 1 }}>
@@ -87,7 +87,7 @@ function ListViewFurniture({
                       cursor: 'pointer', textAlign: 'left',
                     }}
                   >
-                    <div style={{
+                    <div className="emoji" style={{
                       width: 34, height: 34, borderRadius: 9,
                       background: 'rgba(196,168,130,0.12)',
                       display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -178,7 +178,7 @@ function TileViewFurniture({
                   background: 'var(--red)',
                 }} />
               )}
-              <div style={{
+              <div className="emoji" style={{
                 width: 48, height: 48, borderRadius: 'var(--r)',
                 background: 'rgba(232,168,124,0.14)',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -217,7 +217,7 @@ function TileViewFurniture({
               fontWeight: 700, fontSize: 13, color: 'var(--text-secondary)',
               marginBottom: 12, display: 'flex', alignItems: 'center', gap: 6,
             }}>
-              🪑 {furniture.name}のアイテム
+              <span className="emoji">🪑</span> {furniture.name}のアイテム
             </div>
             <div style={{
               display: 'grid',
@@ -245,7 +245,7 @@ function TileViewFurniture({
                       transition: 'var(--ease-fast)',
                     }}
                   >
-                    <div style={{ fontSize: 18 }}>📦</div>
+                    <div className="emoji" style={{ fontSize: 18 }}>📦</div>
                     <div style={{
                       fontSize: 10, fontWeight: 600, textAlign: 'center',
                       lineHeight: 1.3, color: 'var(--text-primary)',

@@ -62,7 +62,7 @@ function FloorPlanGrid({ rooms, onRoomClick }: { rooms: Room[]; onRoomClick: (r:
                 background: 'var(--red)',
               }} />
             )}
-            <div style={{ fontSize: h > 1 ? 30 : 22, lineHeight: 1 }}>{room.icon}</div>
+            <div className="emoji" style={{ fontSize: h > 1 ? 30 : 22, lineHeight: 1 }}>{room.icon}</div>
             <div style={{
               fontWeight: 700,
               fontSize: h > 1 ? 13 : 11,
@@ -255,7 +255,7 @@ export function HomeScreen({ onRoomClick, onSearchFocus }: Props) {
                 cursor: 'pointer',
               }}
             >
-              <div style={{ fontSize: 22 }}>{item.emoji}</div>
+              <div className="emoji" style={{ fontSize: 22 }}>{item.emoji}</div>
               <div style={{
                 fontSize: 11, fontWeight: 600, textAlign: 'center',
                 color: 'var(--text-primary)', lineHeight: 1.3,

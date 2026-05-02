@@ -44,7 +44,7 @@ export function AddScreen({ onClose }: Props) {
         display: 'flex', flexDirection: 'column',
         alignItems: 'center', justifyContent: 'center', gap: 16,
       }}>
-        <div style={{ fontSize: 60 }}>✅</div>
+        <div className="emoji" style={{ fontSize: 60 }}>✅</div>
         <div style={{ fontWeight: 800, fontSize: 22 }}>登録しました！</div>
         <div style={{ color: 'var(--text-tertiary)', fontSize: 14 }}>
           {itemName} → {SAMPLE_DATA.rooms.find(r => r.id === selectedRoom)?.name ?? 'リビング'}
@@ -141,7 +141,7 @@ export function AddScreen({ onClose }: Props) {
                   display: 'flex', gap: 16, alignItems: 'center', textAlign: 'left',
                 }}
               >
-                <div style={{
+                <div className="emoji" style={{
                   width: 54, height: 54, borderRadius: 'var(--r)',
                   background: 'rgba(196,168,130,0.12)',
                   display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
@@ -200,7 +200,7 @@ export function AddScreen({ onClose }: Props) {
                   borderRadius: 'var(--r)',
                   animation: 'pulse-border 1.5s infinite',
                 }} />
-                <div style={{ color: 'rgba(255,255,255,0.3)', fontSize: 40 }}>📷</div>
+                <div className="emoji" style={{ color: 'rgba(255,255,255,0.3)', fontSize: 40 }}>📷</div>
                 <div style={{
                   position: 'absolute', left: 20, right: 20, height: 2,
                   background: 'linear-gradient(90deg, transparent, var(--accent), transparent)',
@@ -368,7 +368,7 @@ export function AddScreen({ onClose }: Props) {
                     textAlign: 'left',
                   }}
                 >
-                  <span style={{ fontSize: 24 }}>{room.icon}</span>
+                  <span className="emoji" style={{ fontSize: 24 }}>{room.icon}</span>
                   <div style={{ flex: 1 }}>
                     <div style={{ fontWeight: 700, fontSize: 15 }}>{room.name}</div>
                     <div style={{ fontSize: 12, color: 'var(--text-tertiary)' }}>{room.itemCount}点</div>

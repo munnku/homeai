@@ -87,6 +87,11 @@ body {
 /* Tap highlight */
 * { -webkit-tap-highlight-color: transparent; }
 
+/* ─── Emoji monochrome ───────────────────────────── */
+.emoji {
+  filter: grayscale(1) sepia(0.3) brightness(0.85);
+}
+
 /* ─── Glass utility ──────────────────────────────── */
 .glass {
   background: var(--glass);

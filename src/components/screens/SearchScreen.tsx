@@ -160,7 +160,7 @@ export function SearchScreen({ onItemClick, initialFocus = false }: Props) {
                       cursor: 'pointer', textAlign: 'left',
                     }}
                   >
-                    <span style={{ fontSize: 16, color: 'var(--text-tertiary)' }}>🕐</span>
+                    <span className="emoji" style={{ fontSize: 16, color: 'var(--text-tertiary)' }}>🕐</span>
                     <span style={{ fontSize: 14, fontWeight: 600 }}>{t}</span>
                   </button>
                 ))}
@@ -176,7 +176,7 @@ export function SearchScreen({ onItemClick, initialFocus = false }: Props) {
                 </div>
                 {results.length === 0 ? (
                   <div style={{ textAlign: 'center', padding: '40px 0', color: 'var(--text-tertiary)' }}>
-                    <div style={{ fontSize: 36, marginBottom: 10 }}>🔍</div>
+                    <div className="emoji" style={{ fontSize: 36, marginBottom: 10 }}>🔍</div>
                     <div style={{ fontWeight: 600 }}>見つかりませんでした</div>
                     <div style={{ fontSize: 13, marginTop: 4 }}>AIチャットで試してみましょう</div>
                   </div>

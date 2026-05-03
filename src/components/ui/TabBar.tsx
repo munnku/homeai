@@ -2,12 +2,11 @@
 
 import { IconHome, IconSparkle, IconBox, IconSettings, IconPlus } from './Icons'
 
-export type Tab = 'home' | 'search' | 'items' | 'settings'
+export type Tab = 'home' | 'search' | 'add' | 'items' | 'settings'
 
 interface TabBarProps {
   activeTab: Tab
   onTabChange: (tab: Tab) => void
-  onAdd: () => void
 }
 
 type TabEntry =
@@ -22,7 +21,7 @@ const tabs: TabEntry[] = [
   { kind: 'tab', id: 'settings', label: '設定',     Icon: IconSettings },
 ]
 
-export function TabBar({ activeTab, onTabChange, onAdd }: TabBarProps) {
+export function TabBar({ activeTab, onTabChange }: TabBarProps) {
   return (
     <div className="glass-strong" style={{
       height: 'var(--tab-bar-h)',
@@ -43,16 +42,16 @@ export function TabBar({ activeTab, onTabChange, onAdd }: TabBarProps) {
           return (
             <button
               key="fab"
-              onClick={onAdd}
+              onClick={() => onTabChange('add')}
               style={{
                 width: 52, height: 52,
                 borderRadius: '50%',
-                background: 'var(--accent-grad)',
+                background: activeTab === 'add' ? 'var(--accent-dark)' : 'var(--accent-grad)',
                 border: 'none',
                 cursor: 'pointer',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                 boxShadow: `0 4px 18px rgba(200, 130, 80, 0.38)`,
-                transform: 'translateY(-8px)',
+                transform: activeTab === 'add' ? 'translateY(-8px) scale(0.92)' : 'translateY(-8px)',
                 transition: 'var(--ease)',
                 flexShrink: 0,
               }}

@@ -30,7 +30,7 @@ export function ZoomPanControls({ zoom, onZoomIn, onZoomOut, onFitAll }: Props) 
   return (
     <div style={{
       position: 'absolute',
-      bottom: 16,
+      bottom: 'calc(var(--tab-bar-h) + 16px)',
       left: 16,
       display: 'flex',
       flexDirection: 'column',

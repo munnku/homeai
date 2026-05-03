@@ -44,6 +44,8 @@ export function CanvasTile({
   const py = activePos.y * GRID_UNIT
   const pw = pos.w * GRID_UNIT
   const ph = pos.h * GRID_UNIT
+  const showIcon = pos.h >= 2
+  const showBadge = pos.h >= 3
   const tall = pos.h >= 2
   const isDragging = dragState === 'dragging'
 
@@ -62,7 +64,6 @@ export function CanvasTile({
         width: pw,
         height: ph,
         borderRadius: 14,
-        background: editMode ? 'rgba(253,248,240,0.88)' : 'rgba(253,248,240,0.95)',
         border: `2px solid ${borderColor}`,
         boxShadow: isDragging
           ? '0 8px 24px rgba(80,48,18,0.22)'
@@ -70,11 +71,6 @@ export function CanvasTile({
           ? '0 2px 8px rgba(80,48,18,0.10)'
           : '0 1px 4px rgba(80,48,18,0.08)',
         cursor: isDragging ? 'grabbing' : editMode ? 'grab' : 'pointer',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        gap: tall ? 6 : 3,
         userSelect: 'none',
         touchAction: 'none',
         animation: highlight === 'pulsing' ? 'tilePulse 0.8s ease-in-out 3' : undefined,
@@ -85,37 +81,55 @@ export function CanvasTile({
       }}
       onClick={editMode ? undefined : onTap}
     >
-      {/* Alert dot */}
-      {hasAlert && !editMode && (
+      {/* Content area — clips icon/text within tile bounds */}
+      <div
+        style={{
+          position: 'absolute',
+          inset: 0,
+          borderRadius: 12,
+          overflow: 'hidden',
+          background: editMode ? 'rgba(232,216,196,0.92)' : 'rgba(238,224,206,0.97)',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          gap: tall ? 6 : 3,
+        }}
+      >
+        {hasAlert && !editMode && (
+          <div style={{
+            position: 'absolute', top: 7, right: 8,
+            width: 7, height: 7, borderRadius: '50%',
+            background: 'var(--red)',
+            boxShadow: '0 0 0 2px rgba(253,248,240,0.9)',
+          }} />
+        )}
+
+        {showIcon && icon}
+
         <div style={{
-          position: 'absolute', top: 7, right: 8,
-          width: 7, height: 7, borderRadius: '50%',
-          background: 'var(--red)',
-          boxShadow: '0 0 0 2px rgba(253,248,240,0.9)',
-        }} />
-      )}
+          fontWeight: 700,
+          fontSize: tall ? 12 : 10,
+          color: 'rgba(55,30,10,0.82)',
+          textAlign: 'center',
+          padding: '0 4px',
+          lineHeight: 1.25,
+          letterSpacing: '-0.01em',
+          fontFamily: 'var(--font-rounded)',
+          overflow: 'hidden',
+          width: '100%',
+        }}>
+          {label}
+        </div>
 
-      {icon}
-
-      <div style={{
-        fontWeight: 700,
-        fontSize: tall ? 12 : 10,
-        color: 'rgba(55,30,10,0.82)',
-        textAlign: 'center',
-        padding: '0 4px',
-        lineHeight: 1.25,
-        letterSpacing: '-0.01em',
-        fontFamily: 'var(--font-rounded)',
-      }}>
-        {label}
+        {badge && showBadge && (
+          <div style={{ fontSize: 10, color: 'rgba(55,30,10,0.38)', fontWeight: 600 }}>
+            {badge}
+          </div>
+        )}
       </div>
 
-      {badge && tall && (
-        <div style={{ fontSize: 10, color: 'rgba(55,30,10,0.38)', fontWeight: 600 }}>
-          {badge}
-        </div>
-      )}
-
+      {/* EdgeHandles — rendered outside content div so they can extend -3px beyond border */}
       {children}
     </div>
   )

@@ -5,7 +5,6 @@ import { PhoneShell } from './ui/PhoneShell'
 import { TabBar, type Tab } from './ui/TabBar'
 import { FloorPlanScreen } from './screens/FloorPlanScreen'
 import { SearchScreen } from './screens/SearchScreen'
-import { RoomDetailScreen } from './screens/RoomDetailScreen'
 import { RoomCanvasScreen } from './screens/RoomCanvasScreen'
 import { FurnitureDetailScreen } from './screens/FurnitureDetailScreen'
 import { ItemDetailScreen } from './screens/ItemDetailScreen'
@@ -26,11 +25,9 @@ const slideIn: React.CSSProperties = {
   zIndex: 100,
 }
 
-
 export function App() {
   const [activeTab, setActiveTab] = useState<Tab>('home')
   const [stack, setStack] = useState<StackItem[]>([])
-  const [showAdd, setShowAdd] = useState(false)
 
   function pushRoom(room: Room, highlightFurnitureId?: string) {
     setStack(s => [...s, { type: 'room', room, highlightFurnitureId }])
@@ -60,6 +57,7 @@ export function App() {
         <FloorPlanScreen onRoomClick={pushRoom} />
       )}
       {activeTab === 'search' && <SearchScreen />}
+      {activeTab === 'add' && <AddScreen />}
       {activeTab === 'items' && <ItemsScreen onItemClick={pushItem} />}
       {activeTab === 'settings' && <SettingsScreen />}
 
@@ -115,14 +113,10 @@ export function App() {
         return null
       })}
 
-      {/* Add modal */}
-      {showAdd && <AddScreen onClose={() => setShowAdd(false)} />}
-
       {/* Tab bar */}
       <TabBar
         activeTab={activeTab}
         onTabChange={handleTabChange}
-        onAdd={() => setShowAdd(true)}
       />
     </PhoneShell>
   )

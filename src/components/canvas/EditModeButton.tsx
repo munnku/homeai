@@ -13,7 +13,7 @@ export function EditModeButton({ editMode, onToggle }: Props) {
       onClick={onToggle}
       style={{
         position: 'absolute',
-        bottom: 16,
+        bottom: 'calc(var(--tab-bar-h) + 16px)',
         right: 16,
         width: 44,
         height: 44,

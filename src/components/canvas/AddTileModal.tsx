@@ -48,7 +48,7 @@ export function AddTileButton({ kind, onAdd }: Props) {
         onClick={() => setOpen(true)}
         style={{
           position: 'absolute',
-          bottom: 68,
+          bottom: 'calc(var(--tab-bar-h) + 68px)',
           right: 16,
           width: 44,
           height: 44,

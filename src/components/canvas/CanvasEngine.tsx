@@ -15,8 +15,8 @@ interface Props {
 }
 
 export function CanvasEngine({ tiles, editMode = false, children }: Props) {
-  const canvasW = tiles.length > 0 ? Math.max(...tiles.map(t => (t.x + t.w) * GRID_UNIT)) : 400
-  const canvasH = tiles.length > 0 ? Math.max(...tiles.map(t => (t.y + t.h) * GRID_UNIT)) : 300
+  const canvasW = (tiles.length > 0 ? Math.max(...tiles.map(t => (t.x + t.w) * GRID_UNIT)) : 400) * 3
+  const canvasH = (tiles.length > 0 ? Math.max(...tiles.map(t => (t.y + t.h) * GRID_UNIT)) : 300) * 3
 
   const containerRef = useRef<HTMLDivElement>(null)
   const [viewport, setViewport] = useState<Viewport>({ offsetX: 0, offsetY: 0, zoom: 1 })

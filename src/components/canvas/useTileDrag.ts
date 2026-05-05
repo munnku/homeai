@@ -31,6 +31,11 @@ export function useTileDrag({ pos, zoom, editMode, onMove, onTap }: Options) {
       }
 
       if (first) {
+        const target = event?.target as HTMLElement | null
+        if (target?.closest('[data-edge-handle]')) {
+          cancel()
+          return
+        }
         isDraggingRef.current = false
         setDragState('pressing')
         longPressTimer.current = setTimeout(() => {

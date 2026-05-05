@@ -35,7 +35,7 @@ export const SAMPLE_DATA: { household: string; rooms: Room[] } = {
   rooms: [
     {
       id: 'living', name: 'リビング', icon: 'living',
-      canvasPos: { x: 0, y: 0, w: 2, h: 2 }, itemCount: 34,
+      canvasPos: { x: 0, y: 0, w: 6, h: 6 }, itemCount: 34,
       furniture: [
         { id: 'tv-shelf', name: 'テレビ台', canvasPos: { x: 0, y: 0, w: 4, h: 2 }, items: [
           { id: 'i1', name: 'リモコン（テレビ）', tags: ['電気製品'] },
@@ -50,7 +50,7 @@ export const SAMPLE_DATA: { household: string; rooms: Room[] } = {
     },
     {
       id: 'kitchen', name: 'キッチン', icon: 'kitchen',
-      canvasPos: { x: 2, y: 0, w: 2, h: 1 }, itemCount: 52,
+      canvasPos: { x: 6, y: 0, w: 6, h: 3 }, itemCount: 52,
       furniture: [
         { id: 'refrigerator', name: '冷蔵庫', canvasPos: { x: 0, y: 0, w: 2, h: 3 }, items: [
           { id: 'i6', name: '牛乳', tags: ['食品'], expiry: '2026-05-04' },
@@ -64,7 +64,7 @@ export const SAMPLE_DATA: { household: string; rooms: Room[] } = {
     },
     {
       id: 'bedroom', name: '寝室', icon: 'bedroom',
-      canvasPos: { x: 0, y: 2, w: 2, h: 1 }, itemCount: 18,
+      canvasPos: { x: 0, y: 6, w: 6, h: 3 }, itemCount: 18,
       furniture: [
         { id: 'wardrobe', name: 'クローゼット', canvasPos: { x: 0, y: 0, w: 4, h: 5 }, items: [
           { id: 'i10', name: '冬用コート（黒）', tags: ['衣類'] },
@@ -74,7 +74,7 @@ export const SAMPLE_DATA: { household: string; rooms: Room[] } = {
     },
     {
       id: 'bathroom', name: '洗面所', icon: 'bathroom',
-      canvasPos: { x: 2, y: 1, w: 1, h: 1 }, itemCount: 21,
+      canvasPos: { x: 6, y: 3, w: 3, h: 3 }, itemCount: 21,
       furniture: [
         { id: 'cabinet', name: '洗面台下収納', canvasPos: { x: 1, y: 1, w: 4, h: 2 }, items: [
           { id: 'i12', name: 'シャンプー（詰め替え）', tags: ['日用品'], count: 2 },
@@ -84,7 +84,7 @@ export const SAMPLE_DATA: { household: string; rooms: Room[] } = {
     },
     {
       id: 'child', name: '子供部屋', icon: 'child',
-      canvasPos: { x: 3, y: 1, w: 1, h: 2 }, itemCount: 47,
+      canvasPos: { x: 9, y: 3, w: 3, h: 6 }, itemCount: 47,
       furniture: [
         { id: 'toy-box', name: 'おもちゃ箱', canvasPos: { x: 1, y: 0, w: 4, h: 3 }, items: [
           { id: 'i14', name: 'レゴブロック', tags: ['おもちゃ'] },
@@ -94,7 +94,7 @@ export const SAMPLE_DATA: { household: string; rooms: Room[] } = {
     },
     {
       id: 'storage', name: '納戸', icon: 'storage',
-      canvasPos: { x: 2, y: 2, w: 1, h: 1 }, itemCount: 63,
+      canvasPos: { x: 6, y: 6, w: 3, h: 3 }, itemCount: 63,
       furniture: [
         { id: 'shelf-a', name: '棚A', canvasPos: { x: 0, y: 0, w: 5, h: 4 }, items: [
           { id: 'i16', name: '掃除機', tags: ['家電'] },

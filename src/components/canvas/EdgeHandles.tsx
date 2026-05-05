@@ -72,7 +72,7 @@ function EdgeHandle({ edge, pos, zoom, onResize }: {
     }
   })()
 
-  return <div {...bind()} style={{ ...baseStyle, ...edgeStyle }} />
+  return <div {...bind()} data-edge-handle="true" style={{ ...baseStyle, ...edgeStyle }} />
 }
 
 export function EdgeHandles({ pos, onResize }: Props) {

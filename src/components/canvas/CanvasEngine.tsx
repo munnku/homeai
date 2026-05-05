@@ -22,6 +22,7 @@ export function CanvasEngine({ tiles, editMode = false, children }: Props) {
   const [viewport, setViewport] = useState<Viewport>({ offsetX: 0, offsetY: 0, zoom: 1 })
   const viewportRef = useRef(viewport)
   viewportRef.current = viewport
+  const tileGestureRef = useRef(false)
 
   useEffect(() => {
     const el = containerRef.current
@@ -54,11 +55,14 @@ export function CanvasEngine({ tiles, editMode = false, children }: Props) {
 
   useGesture(
     {
-      onDrag: ({ event, delta: [dx, dy], touches, canceled }) => {
+      onDrag: ({ event, delta: [dx, dy], touches, canceled, first, last }) => {
         if (canceled || touches > 1) return
-        // Don't pan when drag originates from a tile in edit mode
-        const target = event?.target as HTMLElement | null
-        if (editMode && target?.closest('[data-tile]')) return
+        if (first) {
+          const target = event?.target as HTMLElement | null
+          tileGestureRef.current = !!(editMode && target?.closest('[data-tile]'))
+        }
+        if (last) tileGestureRef.current = false
+        if (tileGestureRef.current) return
         setViewport(v => ({ ...v, offsetX: v.offsetX + dx, offsetY: v.offsetY + dy }))
       },
       onPinch: ({ offset: [scale], origin: [ox, oy], first, memo }) => {

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { getAIProvider } from '@/lib/ai'
 import type { ChatMessage } from '@/lib/ai'
+import { getAncestorNamesBatch } from '@/lib/supabase/ancestors'
 
 // POST /api/ai/chat
 // Body: { household_id: string, messages: ChatMessage[] }
@@ -42,20 +43,18 @@ export async function POST(req: NextRequest) {
       .limit(20)
 
     if (searchResults?.length) {
-      // Build context with ancestor paths
-      const contextLines = await Promise.all(
-        searchResults.map(async (node) => {
-          const path = await getAncestorNames(supabase, node.parent_id)
-          const location = [...path, node.name].join(' > ')
-          const meta = node.metadata
-            ? Object.entries(node.metadata)
-                .filter(([k]) => k !== 'serial_number')
-                .map(([k, v]) => `${k}: ${v}`)
-                .join(', ')
-            : ''
-          return `- ${location}${meta ? ` (${meta})` : ''}`
-        })
-      )
+      const pathMap = await getAncestorNamesBatch(supabase, searchResults.map(n => n.parent_id))
+      const contextLines = searchResults.map((node) => {
+        const path = pathMap.get(node.parent_id) ?? []
+        const location = [...path, node.name].join(' > ')
+        const meta = node.metadata
+          ? Object.entries(node.metadata)
+              .filter(([k]) => k !== 'serial_number')
+              .map(([k, v]) => `${k}: ${v}`)
+              .join(', ')
+          : ''
+        return `- ${location}${meta ? ` (${meta})` : ''}`
+      })
       context = contextLines.join('\n')
     }
   }
@@ -63,27 +62,4 @@ export async function POST(req: NextRequest) {
   const ai = getAIProvider()
   const reply = await ai.chat(messages, context)
   return NextResponse.json({ reply })
-}
-
-async function getAncestorNames(
-  supabase: Awaited<ReturnType<typeof import('@/lib/supabase/server').createClient>>,
-  parentId: string | null
-): Promise<string[]> {
-  if (!parentId) return []
-  const names: string[] = []
-  let currentId: string | null = parentId
-
-  while (currentId) {
-    const { data } = await supabase
-      .from('nodes')
-      .select('id, name, parent_id')
-      .eq('id', currentId)
-      .single()
-
-    if (!data) break
-    names.unshift(data.name)
-    currentId = data.parent_id
-  }
-
-  return names
 }

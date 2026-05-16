@@ -2,6 +2,14 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createServiceClient } from '@/lib/supabase/server'
 import webpush from 'web-push'
 
+if (process.env.VAPID_SUBJECT && process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY && process.env.VAPID_PRIVATE_KEY) {
+  webpush.setVapidDetails(
+    process.env.VAPID_SUBJECT,
+    process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY,
+    process.env.VAPID_PRIVATE_KEY
+  )
+}
+
 // POST /api/notifications/send-expiry
 // Called by Supabase cron via pg_notify listener or external cron
 // Secured with CRON_SECRET header
@@ -9,11 +17,6 @@ export async function POST(req: NextRequest) {
   if (!process.env.VAPID_SUBJECT || !process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY || !process.env.VAPID_PRIVATE_KEY) {
     return NextResponse.json({ error: 'VAPID not configured' }, { status: 500 })
   }
-  webpush.setVapidDetails(
-    process.env.VAPID_SUBJECT,
-    process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY,
-    process.env.VAPID_PRIVATE_KEY
-  )
   const secret = req.headers.get('x-cron-secret')
   if (secret !== process.env.CRON_SECRET) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
@@ -27,7 +30,6 @@ export async function POST(req: NextRequest) {
   const todayStr = today.toISOString().split('T')[0]
   const thresholdStr = threeDaysFromNow.toISOString().split('T')[0]
 
-  // Find nodes with expiry within 3 days
   const { data: expiringNodes, error } = await supabase
     .from('nodes')
     .select('id, name, household_id, metadata')
@@ -39,7 +41,6 @@ export async function POST(req: NextRequest) {
   if (error) return NextResponse.json({ error: error.message }, { status: 500 })
   if (!expiringNodes?.length) return NextResponse.json({ sent: 0 })
 
-  // Group by household
   const byHousehold = expiringNodes.reduce<Record<string, typeof expiringNodes>>((acc, node) => {
     acc[node.household_id] = acc[node.household_id] ?? []
     acc[node.household_id].push(node)
@@ -49,7 +50,6 @@ export async function POST(req: NextRequest) {
   let sentCount = 0
 
   for (const [householdId, nodes] of Object.entries(byHousehold)) {
-    // Get all members of this household
     const { data: members } = await supabase
       .from('household_members')
       .select('user_id')
@@ -59,10 +59,9 @@ export async function POST(req: NextRequest) {
 
     const userIds = members.map(m => m.user_id)
 
-    // Get push subscriptions for those users
     const { data: subscriptions } = await supabase
       .from('push_subscriptions')
-      .select('user_id, subscription')
+      .select('id, user_id, subscription')
       .in('user_id', userIds)
 
     if (!subscriptions?.length) continue
@@ -80,14 +79,20 @@ export async function POST(req: NextRequest) {
       url: '/app'
     })
 
-    for (const sub of subscriptions) {
-      try {
-        await webpush.sendNotification(sub.subscription as webpush.PushSubscription, payload)
-        sentCount++
-      } catch {
-        // Subscription may have expired — remove it
-        await supabase.from('push_subscriptions').delete().eq('user_id', sub.user_id)
-      }
+    const results = await Promise.allSettled(
+      subscriptions.map(sub =>
+        webpush.sendNotification(sub.subscription as webpush.PushSubscription, payload)
+      )
+    )
+
+    const failedIds = results
+      .map((result, i) => result.status === 'rejected' ? subscriptions[i].id : null)
+      .filter((id): id is string => id !== null)
+
+    sentCount += results.filter(r => r.status === 'fulfilled').length
+
+    if (failedIds.length > 0) {
+      await supabase.from('push_subscriptions').delete().in('id', failedIds)
     }
   }
 

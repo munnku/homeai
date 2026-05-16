@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import { SAMPLE_DATA, expiryStatus, type Room, type Item, type FlatItem } from '@/lib/data'
 import { IconSearch, IconChevronDown, IconChevronRight, IconBox, getRoomIcon } from '@/components/ui/Icons'
 import { Badge } from '@/components/ui/Badge'
@@ -279,7 +279,11 @@ export function ItemsScreen({ onItemClick }: Props) {
   const rooms = SAMPLE_DATA.rooms
 
   const isSearching = query.trim().length > 0
-  const searchResults = isSearching ? filterItems(rooms, query, filter) : []
+  const searchResults = useMemo(
+    () => isSearching ? filterItems(rooms, query, filter) : [],
+    [rooms, query, filter]
+  )
+  const expiryItems = useMemo(() => filterItems(rooms, '', 'expiry'), [rooms])
 
   const filters: { id: ItemFilter; label: string }[] = [
     { id: 'all',    label: 'すべて' },
@@ -375,7 +379,7 @@ export function ItemsScreen({ onItemClick }: Props) {
 
             {filter === 'expiry' ? (
               <SearchResults
-                items={filterItems(rooms, '', 'expiry')}
+                items={expiryItems}
                 onItemClick={onItemClick}
               />
             ) : (

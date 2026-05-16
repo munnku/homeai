@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
+import { getAncestorNamesBatch } from '@/lib/supabase/ancestors'
 
 // GET /api/nodes/search?household_id=&q=
 export async function GET(req: NextRequest) {
@@ -16,7 +17,7 @@ export async function GET(req: NextRequest) {
 
   const { data, error } = await supabase
     .from('nodes')
-    .select('*')
+    .select('id, household_id, parent_id, name, type, description, photo_url, qr_uuid, metadata, archived, created_at, updated_at')
     .eq('household_id', household_id)
     .eq('archived', false)
     .textSearch('search_vector', q, { type: 'plain', config: 'simple' })
@@ -24,31 +25,8 @@ export async function GET(req: NextRequest) {
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 })
 
-  // Enrich results with ancestor path
-  const enriched = await Promise.all(data.map(async (node) => {
-    const path = await getAncestorPath(supabase, node.parent_id)
-    return { ...node, path }
-  }))
+  const pathMap = await getAncestorNamesBatch(supabase, data.map(n => n.parent_id))
+  const enriched = data.map(node => ({ ...node, path: pathMap.get(node.parent_id) ?? [] }))
 
   return NextResponse.json(enriched)
-}
-
-async function getAncestorPath(supabase: Awaited<ReturnType<typeof import('@/lib/supabase/server').createClient>>, parentId: string | null): Promise<string[]> {
-  if (!parentId) return []
-  const path: string[] = []
-  let currentId: string | null = parentId
-
-  while (currentId) {
-    const { data } = await supabase
-      .from('nodes')
-      .select('id, name, parent_id')
-      .eq('id', currentId)
-      .single()
-
-    if (!data) break
-    path.unshift(data.name)
-    currentId = data.parent_id
-  }
-
-  return path
 }

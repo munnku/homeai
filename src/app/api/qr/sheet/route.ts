@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import QRCode from 'qrcode'
+import { getAncestorNamesBatch } from '@/lib/supabase/ancestors'
 
 // POST /api/qr/sheet
 // Body: { node_ids: string[] }
@@ -33,9 +34,11 @@ export async function POST(req: NextRequest) {
 
   const appUrl = process.env.NEXT_PUBLIC_APP_URL
 
+  // Batch-fetch all ancestor paths before parallelizing QR generation
+  const pathMap = await getAncestorNamesBatch(supabase, nodes.map(n => n.parent_id))
+
   const items = await Promise.all(
     nodes.map(async (node) => {
-      // Generate QR UUID if not yet set
       let qrUuid = node.qr_uuid
       if (!qrUuid) {
         const { data: updated } = await supabase
@@ -49,36 +52,11 @@ export async function POST(req: NextRequest) {
 
       const url = `${appUrl}/scan/${qrUuid}`
       const qrDataUrl = await QRCode.toDataURL(url, { width: 200, margin: 1 })
-
-      // Get location path
-      const path = await getAncestorNames(supabase, node.parent_id)
-      const location = path.join(' > ')
+      const location = (pathMap.get(node.parent_id) ?? []).join(' > ')
 
       return { id: node.id, name: node.name, location, qrDataUrl, url }
     })
   )
 
   return NextResponse.json({ items })
-}
-
-async function getAncestorNames(
-  supabase: Awaited<ReturnType<typeof import('@/lib/supabase/server').createClient>>,
-  parentId: string | null
-): Promise<string[]> {
-  if (!parentId) return []
-  const names: string[] = []
-  let currentId: string | null = parentId
-
-  while (currentId) {
-    const { data } = await supabase
-      .from('nodes')
-      .select('id, name, parent_id')
-      .eq('id', currentId)
-      .single()
-    if (!data) break
-    names.unshift(data.name)
-    currentId = data.parent_id
-  }
-
-  return names
 }

@@ -16,7 +16,7 @@ export async function GET(req: NextRequest) {
 
   let query = supabase
     .from('nodes')
-    .select('*')
+    .select('id, household_id, parent_id, name, type, description, photo_url, qr_uuid, position, metadata, archived, archived_at, created_by, created_at, updated_at')
     .eq('household_id', household_id)
     .order('type')
     .order('name')

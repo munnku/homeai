@@ -8,7 +8,11 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
   if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
   const { id } = await params
-  const { data, error } = await supabase.from('nodes').select('*').eq('id', id).single()
+  const { data, error } = await supabase
+    .from('nodes')
+    .select('id, household_id, parent_id, name, type, description, photo_url, qr_uuid, position, metadata, archived, archived_at, created_by, created_at, updated_at')
+    .eq('id', id)
+    .single()
   if (error) return NextResponse.json({ error: 'Not found' }, { status: 404 })
   return NextResponse.json(data)
 }
@@ -22,8 +26,11 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
   const { id } = await params
   const body = await req.json()
 
-  // Fetch current node for history
-  const { data: current } = await supabase.from('nodes').select('*').eq('id', id).single()
+  const { data: current } = await supabase
+    .from('nodes')
+    .select('parent_id, name, archived')
+    .eq('id', id)
+    .single()
   if (!current) return NextResponse.json({ error: 'Not found' }, { status: 404 })
 
   const { data: updated, error } = await supabase

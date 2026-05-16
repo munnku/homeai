@@ -1,30 +1,37 @@
+import type { ReactNode } from 'react'
 import { IconArrowLeft } from './Icons'
 
 interface HeaderProps {
   title: string
   onBack?: () => void
-  right?: React.ReactNode
+  /** Accessible label for the back button (defaults to "戻る") */
+  backLabel?: string
+  right?: ReactNode
 }
 
-export function Header({ title, onBack, right }: HeaderProps) {
+export function Header({ title, onBack, backLabel = '戻る', right }: HeaderProps) {
   return (
-    <div className="glass-strong" style={{
-      height: 'var(--header-h)',
-      display: 'flex',
-      alignItems: 'center',
-      padding: '0 16px',
-      gap: 10,
-      position: 'sticky',
-      top: 0,
-      zIndex: 100,
-      borderRadius: 0,
-      borderLeft: 'none',
-      borderRight: 'none',
-      borderTop: 'none',
-    }}>
+    <header
+      className="glass-strong"
+      style={{
+        height: 'var(--header-h)',
+        display: 'flex',
+        alignItems: 'center',
+        padding: '0 16px',
+        gap: 10,
+        position: 'sticky',
+        top: 0,
+        zIndex: 100,
+        borderRadius: 0,
+        borderLeft: 'none',
+        borderRight: 'none',
+        borderTop: 'none',
+      }}
+    >
       {onBack && (
         <button
           onClick={onBack}
+          aria-label={backLabel}
           style={{
             width: 36, height: 36,
             borderRadius: 'var(--r-sm)',
@@ -40,18 +47,20 @@ export function Header({ title, onBack, right }: HeaderProps) {
           <IconArrowLeft size={18} color="var(--text-secondary)" />
         </button>
       )}
-      <div style={{
+      <h1 style={{
         flex: 1,
+        margin: 0,
         fontWeight: 700,
         fontSize: 17,
         color: 'var(--text-primary)',
         overflow: 'hidden',
         textOverflow: 'ellipsis',
         whiteSpace: 'nowrap',
+        fontFamily: 'var(--font-rounded)',
       }}>
         {title}
-      </div>
+      </h1>
       {right}
-    </div>
+    </header>
   )
 }

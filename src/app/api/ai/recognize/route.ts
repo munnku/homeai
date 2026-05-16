@@ -11,29 +11,24 @@ export async function POST(req: NextRequest) {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
-  // Rate limit check for free users
+  // Rate limit check for free users — atomic to prevent race conditions
   const isPaid = (user.user_metadata?.plan ?? 'free') === 'paid'
   if (!isPaid) {
     const today = new Date().toISOString().split('T')[0]
-    const { data: usage } = await supabase
-      .from('ai_recognition_usage')
-      .select('count')
-      .eq('user_id', user.id)
-      .eq('date', today)
-      .single()
+    const { data: newCount, error: rpcError } = await supabase
+      .rpc('increment_ai_usage', {
+        p_user_id: user.id,
+        p_date: today,
+        p_limit: FREE_DAILY_LIMIT,
+      })
 
-    const currentCount = usage?.count ?? 0
-    if (currentCount >= FREE_DAILY_LIMIT) {
+    if (rpcError) return NextResponse.json({ error: rpcError.message }, { status: 500 })
+    if ((newCount ?? -1) < 0) {
       return NextResponse.json(
         { error: `無料プランは1日${FREE_DAILY_LIMIT}回までです。有料プランにアップグレードしてください。` },
         { status: 429 }
       )
     }
-
-    // Increment usage
-    await supabase
-      .from('ai_recognition_usage')
-      .upsert({ user_id: user.id, date: today, count: currentCount + 1 })
   }
 
   const { image_base64, mime_type } = await req.json()

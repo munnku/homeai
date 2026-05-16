@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import { SAMPLE_DATA, expiryStatus, type Room, type CanvasPos } from '@/lib/data'
 import { IconSearch, IconEdit, getRoomIcon } from '@/components/ui/Icons'
 
@@ -28,9 +28,10 @@ export function HomeScreen({ onRoomClick, onSearchFocus }: Props) {
   const [editMode,   setEditMode]   = useState(false)
   const [selectedId, setSelectedId] = useState<string | null>(null)
 
-  const alertCount = rooms
-    .flatMap(r => r.furniture.flatMap(f => f.items))
-    .filter(i => expiryStatus(i.expiry) === 'red').length
+  const alertCount = useMemo(
+    () => rooms.flatMap(r => r.furniture.flatMap(f => f.items)).filter(i => expiryStatus(i.expiry) === 'red').length,
+    [rooms]
+  )
 
   function handleRoomTap(room: Room) {
     if (!editMode) { onRoomClick(room); return }
